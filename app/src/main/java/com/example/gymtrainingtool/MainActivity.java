@@ -1,10 +1,12 @@
 package com.example.gymtrainingtool;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.gymtrainingtool.ui.main.Calculator;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabItem;
@@ -17,6 +19,7 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -71,7 +74,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TabLayout tabLayout = findViewById(R.id.tabBar);
+        submit2 = findViewById(R.id.submit2);
+        reps = findViewById(R.id.Reps);
+        weight2 = findViewById(R.id.ORMWeight);
+        result = findViewById(R.id.KGresult);
+        LBresult = findViewById(R.id.LBresult);
+
+        final TabLayout tabLayout = findViewById(R.id.tabBar);
         TabItem tools = findViewById(R.id.tab1);
         TabItem grip = findViewById(R.id.tab2);
         final ViewPager viewPager = findViewById(R.id.view_pager);
@@ -80,10 +89,15 @@ public class MainActivity extends AppCompatActivity {
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
         viewPager.setAdapter(sectionsPagerAdapter);
 
+        //Calculator calculator = (Calculator)getSupportFragmentManager().findFragmentByTag(R.layout.fragment_calculator)
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout)); // makes the tab indicator work
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+
             }
 
             @Override
@@ -108,5 +122,10 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+
     }
+
+
 }
