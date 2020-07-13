@@ -33,52 +33,12 @@ import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
-    double calculatedNumber = 0;
-    double storedValue = 0;
-    double percentage = 0;
-    double finalNumber = 0;
-    double rawFinal = 0;
-    double poundCalc = 0;
-    double convertedWeight = 0;
-    double ormWeight = 0;
-    double oneRepMax = 0;
 
-    int repetitions = 0;
-    int intPart = 0;
-    int lastDigit = 0;
-
-    Boolean switchCheck = false;
-    boolean ccSwitchCheck = false;
-
-    DecimalFormat df = new DecimalFormat();
-
-    EditText poundWeight, weight, weight2, reps, Percentage, calorieInput;
-    TextView result, LBresult, timer;
-    ImageView image;
-
-    Switch xmlSwitch;
-    Switch ccSwitch;
-
-    Button start, pause, reset, submitButton, submit1, submit2, submitCC;
-    Handler handler;
-    long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L ;
-    int Seconds, Minutes, MilliSeconds ;
-
-    Uri defaultRingtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-    MediaPlayer mediaPlayer = new MediaPlayer();
-    private int noOfTabs = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        submit2 = findViewById(R.id.submit2);
-        reps = findViewById(R.id.Reps);
-        weight2 = findViewById(R.id.ORMWeight);
-        result = findViewById(R.id.KGresult);
-        LBresult = findViewById(R.id.LBresult);
 
         final TabLayout tabLayout = findViewById(R.id.tabBar);
         TabItem tools = findViewById(R.id.tab1);
@@ -89,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
         viewPager.setAdapter(sectionsPagerAdapter);
 
-        //Calculator calculator = (Calculator)getSupportFragmentManager().findFragmentByTag(R.layout.fragment_calculator)
+
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout)); // makes the tab indicator work
 
