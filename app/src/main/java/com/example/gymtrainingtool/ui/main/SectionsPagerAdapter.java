@@ -29,7 +29,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                    case 0:
                        return new Calculator();
                    case 1:
-                       return new GripExerciseFragment();
+                       return new GripLogger();
                     default:
                            return null;
                }
