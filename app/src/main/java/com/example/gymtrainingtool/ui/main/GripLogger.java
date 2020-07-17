@@ -2,7 +2,9 @@ package com.example.gymtrainingtool.ui.main;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Movie;
 import android.os.Bundle;
 
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +30,15 @@ import com.example.gymtrainingtool.RecyclerTouchListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,13 +68,10 @@ public class GripLogger extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        exerciseDialog = .findViewById(R.id.exercise);
-//        sets = getView().findViewById(R.id.sets);
-//        time = getView().findViewById(R.id.time);
-//        weight = getView().findViewById(R.id.weight);
+
 
         recyclerView = getView().findViewById(R.id.recycler_view);
-        mAdapter = new ExerciseAdapter(exercisesList);
+        mAdapter = new ExerciseAdapter(readList(getContext()));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -73,6 +80,8 @@ public class GripLogger extends Fragment {
         prepareExerciseData();
 
         FloatingActionButton fab = getView().findViewById(R.id.fab);
+
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +126,9 @@ public class GripLogger extends Fragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View mView = inflater.inflate(R.layout.dialog_new_exercise, null);
 
+
+
+
         exerciseDialog = mView.findViewById(R.id.exercise);
         sets = mView.findViewById(R.id.sets);
         time = mView.findViewById(R.id.time);
@@ -133,9 +145,12 @@ public class GripLogger extends Fragment {
 
                         // do what when you click add
                         Exercise exercise = new Exercise(exerciseDialog.getText().toString(),sets.getText().toString() ,weight.getText().toString(),time.getText().toString());
-                        String test = exerciseDialog.getText().toString();
+
                         exercisesList.add(exercise);
                         mAdapter.notifyDataSetChanged();
+
+                        writeList(getContext(),exercisesList);
+
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -151,6 +166,31 @@ public class GripLogger extends Fragment {
         builder1.show();
 
     }
+
+    public static List<Exercise> readList(Context c){//
+        try{
+            FileInputStream fis = c.openFileInput("NAME");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            List<Exercise> list = (List<Exercise>)is.readObject();
+            is.close();
+            return list;
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void writeList(Context c, List<Exercise> list){
+        try{
+            FileOutputStream fos = c.openFileOutput("NAME", Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(list);
+            os.close();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
 
 }
 
