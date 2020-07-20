@@ -1,11 +1,13 @@
 package com.example.gymtrainingtool;
+import java.io.Serializable;
 
-public class Exercise {
+public class Exercise implements Serializable{
 
+    private static final long serialVersionUID = 1L;
     private String title,time,sets,weight;
 
 
-    public Exercise() {
+    public Exercise () {
     }
 
     public Exercise(String title, String sets,String weight, String time) {
