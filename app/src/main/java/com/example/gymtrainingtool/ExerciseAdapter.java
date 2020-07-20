@@ -32,6 +32,19 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
         this.exercisesList = exerciseList;
     }
 
+    public void setExercisesList(List<Exercise> exercisesList) {
+        this.exercisesList = exercisesList;
+    }
+
+    public List<Exercise> getExercisesList() {
+        return exercisesList;
+    }
+
+
+    public void addExercise(Exercise e) {
+        exercisesList.add(e);
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -58,4 +71,8 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
         return exercisesList.size();
     }
 
-}
+    }
+
+
+
+

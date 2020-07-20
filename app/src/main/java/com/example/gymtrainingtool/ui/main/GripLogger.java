@@ -31,6 +31,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -48,6 +49,7 @@ public class GripLogger extends Fragment {
     private List<Exercise> exercisesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ExerciseAdapter mAdapter;
+
     private EditText exerciseDialog,sets,time,weight;
 
     public GripLogger() {
@@ -77,7 +79,8 @@ public class GripLogger extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
-        prepareExerciseData();
+
+       //prepareExerciseData();
 
         FloatingActionButton fab = getView().findViewById(R.id.fab);
 
@@ -95,13 +98,18 @@ public class GripLogger extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Exercise exercise = exercisesList.get(position);
+                Exercise exercise = mAdapter.getExercisesList().get(position);
                 Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onLongClick(View view, int position) {
+                exercisesList = mAdapter.getExercisesList();
+                exercisesList.remove(position);
+                mAdapter.setExercisesList(exercisesList);
+                writeList(getContext(),mAdapter.getExercisesList());
+                mAdapter.notifyDataSetChanged();
 
             }
         }));
@@ -109,25 +117,19 @@ public class GripLogger extends Fragment {
 
     private void prepareExerciseData() {
         Exercise exercise = new Exercise("Single Hand Barbell Hold", "3","60kg", "15");
-        exercisesList.add(exercise);
+        mAdapter.addExercise(exercise);
 
         exercise = new Exercise("Double Overhand Barbell Hold", "3", "100kg","20");
-        exercisesList.add(exercise);
-
+        mAdapter.addExercise(exercise);
 
         mAdapter.notifyDataSetChanged();
     }
 
     private void buildDialog(){
 
-
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View mView = inflater.inflate(R.layout.dialog_new_exercise, null);
-
-
-
 
         exerciseDialog = mView.findViewById(R.id.exercise);
         sets = mView.findViewById(R.id.sets);
@@ -138,18 +140,13 @@ public class GripLogger extends Fragment {
         builder.setMessage("Log new exercise");
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
-
-
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         // do what when you click add
                         Exercise exercise = new Exercise(exerciseDialog.getText().toString(),sets.getText().toString() ,weight.getText().toString(),time.getText().toString());
-
-                        exercisesList.add(exercise);
+                        mAdapter.addExercise(exercise);
+                        writeList(getContext(),mAdapter.getExercisesList());
                         mAdapter.notifyDataSetChanged();
-
-                        writeList(getContext(),exercisesList);
 
                     }
                 })
@@ -180,18 +177,33 @@ public class GripLogger extends Fragment {
         }
     }
 
-    public static void writeList(Context c, List<Exercise> list){
+    public static List<Exercise> removeExercise(Context c,int position){//
         try{
+            FileInputStream fis = c.openFileInput("NAME");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            List<Exercise> list = (List<Exercise>)is.readObject();
+            list.remove(position);
+            is.close();
+            return list;
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void writeList(Context c, List<Exercise> list){
+
+        try{
+
             FileOutputStream fos = c.openFileOutput("NAME", Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
+
             os.writeObject(list);
             os.close();
         }catch(Exception ex){
             ex.printStackTrace();
         }
     }
-
-
 }
 
 
