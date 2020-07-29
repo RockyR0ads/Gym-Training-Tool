@@ -20,7 +20,9 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.gymtrainingtool.Exercise;
@@ -50,7 +52,7 @@ public class GripLogger extends Fragment {
     private RecyclerView recyclerView;
     private ExerciseAdapter mAdapter;
 
-    private EditText exerciseDialog,sets,time,weight;
+    private EditText exerciseDialog,sets,time,weight,reps;
 
     public GripLogger() {
         // Required empty public constructor
@@ -70,7 +72,7 @@ public class GripLogger extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        final RelativeLayout mRlayout = getView().findViewById(R.id.rel);
 
         recyclerView = getView().findViewById(R.id.recycler_view);
         mAdapter = new ExerciseAdapter(readList(getContext()));
@@ -81,10 +83,20 @@ public class GripLogger extends Fragment {
         recyclerView.setAdapter(mAdapter);
 
        //prepareExerciseData();
-
+        Button addSet = view.findViewById(R.id.addSets);
         FloatingActionButton fab = getView().findViewById(R.id.fab);
 
+        addSet.setOnClickListener (new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
+                        RelativeLayout.LayoutParams mRparams = new RelativeLayout.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+                        EditText myEditText = new EditText(getContext());
+                        myEditText.setLayoutParams(mRparams);
+                        mRlayout.addView(myEditText);
+                    }
+                }
+        );
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,10 +128,10 @@ public class GripLogger extends Fragment {
     }
 
     private void prepareExerciseData() {
-        Exercise exercise = new Exercise("Single Hand Barbell Hold", "3","60kg", "15");
+        Exercise exercise = new Exercise("Single Hand Barbell Hold", "3","60kg", "15",1);
         mAdapter.addExercise(exercise);
 
-        exercise = new Exercise("Double Overhand Barbell Hold", "3", "100kg","20");
+        exercise = new Exercise("Double Overhand Barbell Hold", "3", "100kg","20",1);
         mAdapter.addExercise(exercise);
 
         mAdapter.notifyDataSetChanged();
@@ -135,6 +147,7 @@ public class GripLogger extends Fragment {
         sets = mView.findViewById(R.id.sets);
         time = mView.findViewById(R.id.time);
         weight = mView.findViewById(R.id.weight);
+        reps = mView.findViewById(R.id.reps);
 
         builder.setView(mView);
         builder.setMessage("Log new exercise");
@@ -143,7 +156,7 @@ public class GripLogger extends Fragment {
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // do what when you click add
-                        Exercise exercise = new Exercise(exerciseDialog.getText().toString(),sets.getText().toString() ,weight.getText().toString(),time.getText().toString());
+                        Exercise exercise = new Exercise(exerciseDialog.getText().toString(),sets.getText().toString() ,weight.getText().toString(),time.getText().toString(),Integer.parseInt(reps.getText().toString()));
                         mAdapter.addExercise(exercise);
                         writeList(getContext(),mAdapter.getExercisesList());
                         mAdapter.notifyDataSetChanged();

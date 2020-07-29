@@ -4,7 +4,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +20,22 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
     private List<Exercise> exercisesList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, time, sets, setsTitle, weightTitle,weight,timeTitle;
+        public TextView title, setsTitle, weightTitle,timeTitle,repsTitle;
+        public TextInputEditText sets,time,weight,reps;
+
 
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            sets = (TextView) view.findViewById(R.id.sets);
-            time = (TextView) view.findViewById(R.id.time);
-            setsTitle = (TextView) view.findViewById(R.id.setsTitle);
-            weightTitle = (TextView) view.findViewById(R.id.weightTitle);
-            weight = (TextView) view.findViewById(R.id.weight);
-            timeTitle = (TextView) view.findViewById(R.id.timeTitle);
+            title = view.findViewById(R.id.title);
+            sets = view.findViewById(R.id.sets);
+            time = view.findViewById(R.id.time);
+            setsTitle = view.findViewById(R.id.setsTitle);
+            weightTitle =view.findViewById(R.id.weightTitle);
+            repsTitle =view.findViewById(R.id.repsTitle);
+            weight = view.findViewById(R.id.weight);
+            timeTitle = view.findViewById(R.id.timeTitle);
+            reps = view.findViewById(R.id.reps);
+
         }
     }
 
@@ -64,6 +75,9 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
         holder.weightTitle.setText("Weight");
         holder.weight.setText(exercise.getWeight());
         holder.timeTitle.setText("Seconds");
+        holder.repsTitle.setText("Reps");
+        holder.reps.setText(String.valueOf(exercise.getReps()));
+
     }
 
     @Override

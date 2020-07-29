@@ -8,11 +8,11 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ORMWeight"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/primaryTextColor"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
