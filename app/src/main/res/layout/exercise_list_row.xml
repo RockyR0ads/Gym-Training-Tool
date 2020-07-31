@@ -40,7 +40,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:gravity="center_horizontal"
-        android:layout_marginRight="50dp"
+        android:layout_marginRight="90dp"
         android:textColor="@color/colorPrimaryDark"
         android:layout_height="wrap_content"
         android:layout_below="@id/title" />
@@ -78,7 +78,7 @@
 
         android:layout_height="50dp"
         android:textColor="@color/primaryTextColor"
-        android:layout_marginLeft="155dp"
+        android:layout_marginLeft="135dp"
 
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
 
@@ -127,7 +127,7 @@
 
         android:layout_height="50dp"
         android:textColor="@color/primaryTextColor"
-        android:layout_marginLeft="220dp"
+        android:layout_marginLeft="180dp"
 
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
 
@@ -150,7 +150,7 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="300dp"
+        android:layout_marginLeft="240dp"
         android:layout_below="@id/setsTitle"
         android:layout_centerVertical="true"
         android:width="100dp"
@@ -171,14 +171,25 @@
         android:layout_below="@id/title" />
 
 
+    <ImageView
+        android:layout_below="@id/title"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/image_delete"
+        android:layout_width="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_delete">
+        android:contentDescription="delete row"
+    </ImageView>
 
     <TextView
         android:id="@+id/timeTitle"
         android:layout_width="match_parent"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:paddingTop="5dp"
         android:textSize="18sp"
-        android:layout_marginLeft="110dp"
+        android:layout_marginLeft="20dp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"
         android:layout_height="wrap_content"

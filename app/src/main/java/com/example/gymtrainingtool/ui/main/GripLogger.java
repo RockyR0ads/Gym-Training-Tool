@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Movie;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,11 +23,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.gymtrainingtool.Exercise;
 import com.example.gymtrainingtool.ExerciseAdapter;
+import com.example.gymtrainingtool.ItemClickSupport;
 import com.example.gymtrainingtool.R;
 import com.example.gymtrainingtool.RecyclerTouchListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -46,12 +49,12 @@ import java.util.Set;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GripLogger extends Fragment {
+public class GripLogger extends Fragment implements ExerciseAdapter.onItemClickListener {
 
     private List<Exercise> exercisesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ExerciseAdapter mAdapter;
-
+    private ImageView del;
     private EditText exerciseDialog,sets,time,weight,reps;
 
     public GripLogger() {
@@ -75,28 +78,18 @@ public class GripLogger extends Fragment {
         final RelativeLayout mRlayout = getView().findViewById(R.id.rel);
 
         recyclerView = getView().findViewById(R.id.recycler_view);
-        mAdapter = new ExerciseAdapter(readList(getContext()));
+        mAdapter = new ExerciseAdapter(readList(getContext()),this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
-
+        del = view.findViewById(R.id.image_delete);
        //prepareExerciseData();
         Button addSet = view.findViewById(R.id.addSets);
         FloatingActionButton fab = getView().findViewById(R.id.fab);
 
-        addSet.setOnClickListener (new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
 
-                        RelativeLayout.LayoutParams mRparams = new RelativeLayout.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT);
-                        EditText myEditText = new EditText(getContext());
-                        myEditText.setLayoutParams(mRparams);
-                        mRlayout.addView(myEditText);
-                    }
-                }
-        );
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +99,15 @@ public class GripLogger extends Fragment {
                 buildDialog();
             }
         });
+
+        ItemClickSupport.addTo(recyclerView)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        // do it
+                        Toast.makeText(getActivity().getApplicationContext(), "my anus hurts", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
@@ -216,6 +218,11 @@ public class GripLogger extends Fragment {
         }catch(Exception ex){
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void onImageClick(int position) {
+
     }
 }
 

@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -15,16 +17,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyViewHolder>{
-
+public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyViewHolder>{
+    private onItemClickListener mOnItemClickListener;
     private List<Exercise> exercisesList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public interface onItemClickListener{
+        void onImageClick(int position);
+    }
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         public TextView title, setsTitle, weightTitle,timeTitle,repsTitle;
         public TextInputEditText sets,time,weight,reps;
+        public ImageView deleteImage;
+        onItemClickListener oic;
 
 
-        public MyViewHolder(View view) {
+        public MyViewHolder(View view,onItemClickListener oic) {
             super(view);
             title = view.findViewById(R.id.title);
             sets = view.findViewById(R.id.sets);
@@ -35,12 +44,21 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
             weight = view.findViewById(R.id.weight);
             timeTitle = view.findViewById(R.id.timeTitle);
             reps = view.findViewById(R.id.reps);
+            deleteImage = view.findViewById(R.id.image_delete);
+            view.setOnClickListener(this);
+            this.oic = oic;
+        }
 
+
+        @Override
+        public void onClick(View v) {
+            oic.onImageClick(getAdapterPosition());
         }
     }
 
-    public ExerciseAdapter(List<Exercise> exerciseList) {
+    public ExerciseAdapter(List<Exercise> exerciseList, onItemClickListener mOnItemClickListener) {
         this.exercisesList = exerciseList;
+        this.mOnItemClickListener = mOnItemClickListener;
     }
 
     public void setExercisesList(List<Exercise> exercisesList) {
@@ -58,10 +76,9 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.exercise_list_row, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row, parent, false);
 
-        return new MyViewHolder(itemView);
+        return new MyViewHolder(itemView,mOnItemClickListener);
     }
 
     @Override
@@ -86,6 +103,8 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
     }
 
     }
+
+
 
 
 
