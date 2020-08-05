@@ -137,10 +137,10 @@ public class Calculator extends Fragment {
 
                 // store the weight
 
-                ormWeight = Double.valueOf(weight2.getEditText().getText().toString());
+                ormWeight = Double.parseDouble(weight2.getEditText().getText().toString());
 
                 //store the reps
-                repetitions = Integer.valueOf(reps.getEditText().getText().toString());
+                repetitions = Integer.parseInt(reps.getEditText().getText().toString());
 
                 //formula to get 1RM
                 if(repetitions>1) {

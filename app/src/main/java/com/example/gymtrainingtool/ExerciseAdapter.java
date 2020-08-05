@@ -4,32 +4,90 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyViewHolder>{
-
+public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyViewHolder>{
+    private onItemClickListener mOnItemClickListener;
     private List<Exercise> exercisesList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, time, sets, setsTitle, weightTitle,weight,timeTitle;
+    public interface onItemClickListener{
+        void onItemClick(int position);
+        void onDeleteClick(int position);
+    }
 
-        public MyViewHolder(View view) {
+    public void setOnItemClickListener(onItemClickListener listener){
+        mOnItemClickListener = listener;
+    }
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView title, setsTitle, weightTitle,timeTitle,repsTitle;
+        public TextInputEditText sets,time,weight,reps;
+        public ImageView deleteImage;
+
+
+
+        public MyViewHolder(View view, final onItemClickListener listener) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            sets = (TextView) view.findViewById(R.id.sets);
-            time = (TextView) view.findViewById(R.id.time);
-            setsTitle = (TextView) view.findViewById(R.id.setsTitle);
-            weightTitle = (TextView) view.findViewById(R.id.weightTitle);
-            weight = (TextView) view.findViewById(R.id.weight);
-            timeTitle = (TextView) view.findViewById(R.id.timeTitle);
+            title = view.findViewById(R.id.title);
+            sets = view.findViewById(R.id.sets);
+            time = view.findViewById(R.id.time);
+            setsTitle = view.findViewById(R.id.setsTitle);
+            weightTitle =view.findViewById(R.id.weightTitle);
+            repsTitle =view.findViewById(R.id.repsTitle);
+            weight = view.findViewById(R.id.weight);
+            timeTitle = view.findViewById(R.id.timeTitle);
+            reps = view.findViewById(R.id.reps);
+            deleteImage = view.findViewById(R.id.image_delete);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener!=null){
+                        int position = getAdapterPosition();
+                        if(position!= RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
+
+            deleteImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener!=null){
+                        int position = getAdapterPosition();
+                        if(position!= RecyclerView.NO_POSITION){
+                            listener.onDeleteClick(position);
+                        }
+                    }
+                }
+            });
+
         }
+
+
+//        @Override
+//        public void onClick(View v) {
+//            oic.onImageClick(getAdapterPosition());
+//        }
     }
 
     public ExerciseAdapter(List<Exercise> exerciseList) {
         this.exercisesList = exerciseList;
+
     }
 
     public void setExercisesList(List<Exercise> exercisesList) {
@@ -47,10 +105,9 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.exercise_list_row, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row, parent, false);
 
-        return new MyViewHolder(itemView);
+        return new MyViewHolder(itemView,mOnItemClickListener);
     }
 
     @Override
@@ -64,6 +121,9 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
         holder.weightTitle.setText("Weight");
         holder.weight.setText(exercise.getWeight());
         holder.timeTitle.setText("Seconds");
+        holder.repsTitle.setText("Reps");
+        holder.reps.setText(String.valueOf(exercise.getReps()));
+
     }
 
     @Override
@@ -72,6 +132,8 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
     }
 
     }
+
+
 
 
 

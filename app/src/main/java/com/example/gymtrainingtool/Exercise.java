@@ -7,14 +7,17 @@ public class Exercise implements Serializable{
     private String title,time,sets,weight;
 
 
+    int reps;
+
     public Exercise () {
     }
 
-    public Exercise(String title, String sets,String weight, String time) {
+    public Exercise(String title, String sets,String weight, String time, int reps) {
         this.title = title;
         this.sets = sets;
         this.weight = weight;
         this.time = time;
+        this.reps = reps;
     }
 
     public String getTitle() {
@@ -40,4 +43,8 @@ public class Exercise implements Serializable{
     public String getWeight() { return weight; }
 
     public void setWeight(String weight) { this.weight = weight; }
+
+    public int getReps() { return reps; }
+
+    public void setReps(int reps) { this.reps = reps; }
 }

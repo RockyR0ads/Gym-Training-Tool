@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Movie;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,11 +21,15 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.gymtrainingtool.Exercise;
 import com.example.gymtrainingtool.ExerciseAdapter;
+import com.example.gymtrainingtool.ItemClickSupport;
 import com.example.gymtrainingtool.R;
 import com.example.gymtrainingtool.RecyclerTouchListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -44,13 +49,12 @@ import java.util.Set;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GripLogger extends Fragment {
+public class GripLogger extends Fragment{
 
     private List<Exercise> exercisesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ExerciseAdapter mAdapter;
-
-    private EditText exerciseDialog,sets,time,weight;
+    private EditText exerciseDialog,sets,time,weight,reps;
 
     public GripLogger() {
         // Required empty public constructor
@@ -70,7 +74,7 @@ public class GripLogger extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        final RelativeLayout mRlayout = getView().findViewById(R.id.rel);
 
         recyclerView = getView().findViewById(R.id.recycler_view);
         mAdapter = new ExerciseAdapter(readList(getContext()));
@@ -80,8 +84,25 @@ public class GripLogger extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
 
-       //prepareExerciseData();
+        mAdapter.setOnItemClickListener(new ExerciseAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Exercise exercise = mAdapter.getExercisesList().get(position);
+                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " new implementation is WORKING HOORAY", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onDeleteClick(int position) {
+                exercisesList = mAdapter.getExercisesList();
+                exercisesList.remove(position);
+                mAdapter.setExercisesList(exercisesList);
+                writeList(getContext(),mAdapter.getExercisesList());
+                mAdapter.notifyItemRemoved(position);
+            }
+        });
+
+       prepareExerciseData();
+        Button addSet = view.findViewById(R.id.addSets);
         FloatingActionButton fab = getView().findViewById(R.id.fab);
 
 
@@ -95,33 +116,42 @@ public class GripLogger extends Fragment {
             }
         });
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Exercise exercise = mAdapter.getExercisesList().get(position);
-                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+//        ItemClickSupport.addTo(recyclerView)
+//                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+//                        // do it
+//                        Toast.makeText(getActivity().getApplicationContext(), "my anus hurts", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
-            }
+//        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                Exercise exercise = mAdapter.getExercisesList().get(position);
+//                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+//
+//            }
 
-            @Override
-            public void onLongClick(View view, int position) {
-                exercisesList = mAdapter.getExercisesList();
-                exercisesList.remove(position);
-                mAdapter.setExercisesList(exercisesList);
-                writeList(getContext(),mAdapter.getExercisesList());
-                mAdapter.notifyDataSetChanged();
-
-            }
-        }));
+//            @Override
+//            public void onLongClick(View view, int position) {
+//                exercisesList = mAdapter.getExercisesList();
+//                exercisesList.remove(position);
+//                mAdapter.setExercisesList(exercisesList);
+//                writeList(getContext(),mAdapter.getExercisesList());
+//                mAdapter.notifyDataSetChanged();
+//
+//            }
+//        }));
     }
 
     private void prepareExerciseData() {
-        Exercise exercise = new Exercise("Single Hand Barbell Hold", "3","60kg", "15");
+        Exercise exercise = new Exercise("Single Hand Barbell Hold", "3","60kg", "15",1);
         mAdapter.addExercise(exercise);
 
-        exercise = new Exercise("Double Overhand Barbell Hold", "3", "100kg","20");
+        exercise = new Exercise("Double Overhand Barbell Hold", "3", "100kg","20",1);
         mAdapter.addExercise(exercise);
-
+        writeList(getContext(),mAdapter.getExercisesList());
         mAdapter.notifyDataSetChanged();
     }
 
@@ -135,6 +165,7 @@ public class GripLogger extends Fragment {
         sets = mView.findViewById(R.id.sets);
         time = mView.findViewById(R.id.time);
         weight = mView.findViewById(R.id.weight);
+        reps = mView.findViewById(R.id.reps);
 
         builder.setView(mView);
         builder.setMessage("Log new exercise");
@@ -143,7 +174,7 @@ public class GripLogger extends Fragment {
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // do what when you click add
-                        Exercise exercise = new Exercise(exerciseDialog.getText().toString(),sets.getText().toString() ,weight.getText().toString(),time.getText().toString());
+                        Exercise exercise = new Exercise(exerciseDialog.getText().toString(),sets.getText().toString() ,weight.getText().toString(),time.getText().toString(),Integer.parseInt(reps.getText().toString()));
                         mAdapter.addExercise(exercise);
                         writeList(getContext(),mAdapter.getExercisesList());
                         mAdapter.notifyDataSetChanged();
@@ -204,6 +235,7 @@ public class GripLogger extends Fragment {
             ex.printStackTrace();
         }
     }
+
 }
 
 
