@@ -49,12 +49,11 @@ import java.util.Set;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GripLogger extends Fragment implements ExerciseAdapter.onItemClickListener {
+public class GripLogger extends Fragment{
 
     private List<Exercise> exercisesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ExerciseAdapter mAdapter;
-    private ImageView del;
     private EditText exerciseDialog,sets,time,weight,reps;
 
     public GripLogger() {
@@ -78,14 +77,31 @@ public class GripLogger extends Fragment implements ExerciseAdapter.onItemClickL
         final RelativeLayout mRlayout = getView().findViewById(R.id.rel);
 
         recyclerView = getView().findViewById(R.id.recycler_view);
-        mAdapter = new ExerciseAdapter(readList(getContext()),this);
+        mAdapter = new ExerciseAdapter(readList(getContext()));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
-        del = view.findViewById(R.id.image_delete);
-       //prepareExerciseData();
+
+        mAdapter.setOnItemClickListener(new ExerciseAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Exercise exercise = mAdapter.getExercisesList().get(position);
+                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " new implementation is WORKING HOORAY", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+                exercisesList = mAdapter.getExercisesList();
+                exercisesList.remove(position);
+                mAdapter.setExercisesList(exercisesList);
+                writeList(getContext(),mAdapter.getExercisesList());
+                mAdapter.notifyItemRemoved(position);
+            }
+        });
+
+       prepareExerciseData();
         Button addSet = view.findViewById(R.id.addSets);
         FloatingActionButton fab = getView().findViewById(R.id.fab);
 
@@ -100,33 +116,33 @@ public class GripLogger extends Fragment implements ExerciseAdapter.onItemClickL
             }
         });
 
-        ItemClickSupport.addTo(recyclerView)
-                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        // do it
-                        Toast.makeText(getActivity().getApplicationContext(), "my anus hurts", Toast.LENGTH_SHORT).show();
-                    }
-                });
+//        ItemClickSupport.addTo(recyclerView)
+//                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+//                        // do it
+//                        Toast.makeText(getActivity().getApplicationContext(), "my anus hurts", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Exercise exercise = mAdapter.getExercisesList().get(position);
-                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+//        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                Exercise exercise = mAdapter.getExercisesList().get(position);
+//                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+//
+//            }
 
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-                exercisesList = mAdapter.getExercisesList();
-                exercisesList.remove(position);
-                mAdapter.setExercisesList(exercisesList);
-                writeList(getContext(),mAdapter.getExercisesList());
-                mAdapter.notifyDataSetChanged();
-
-            }
-        }));
+//            @Override
+//            public void onLongClick(View view, int position) {
+//                exercisesList = mAdapter.getExercisesList();
+//                exercisesList.remove(position);
+//                mAdapter.setExercisesList(exercisesList);
+//                writeList(getContext(),mAdapter.getExercisesList());
+//                mAdapter.notifyDataSetChanged();
+//
+//            }
+//        }));
     }
 
     private void prepareExerciseData() {
@@ -135,7 +151,7 @@ public class GripLogger extends Fragment implements ExerciseAdapter.onItemClickL
 
         exercise = new Exercise("Double Overhand Barbell Hold", "3", "100kg","20",1);
         mAdapter.addExercise(exercise);
-
+        writeList(getContext(),mAdapter.getExercisesList());
         mAdapter.notifyDataSetChanged();
     }
 
@@ -220,10 +236,6 @@ public class GripLogger extends Fragment implements ExerciseAdapter.onItemClickL
         }
     }
 
-    @Override
-    public void onImageClick(int position) {
-
-    }
 }
 
 

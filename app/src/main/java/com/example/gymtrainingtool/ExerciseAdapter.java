@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,18 +23,23 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
     private List<Exercise> exercisesList;
 
     public interface onItemClickListener{
-        void onImageClick(int position);
+        void onItemClick(int position);
+        void onDeleteClick(int position);
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public void setOnItemClickListener(onItemClickListener listener){
+        mOnItemClickListener = listener;
+    }
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView title, setsTitle, weightTitle,timeTitle,repsTitle;
         public TextInputEditText sets,time,weight,reps;
         public ImageView deleteImage;
-        onItemClickListener oic;
 
 
-        public MyViewHolder(View view,onItemClickListener oic) {
+
+        public MyViewHolder(View view, final onItemClickListener listener) {
             super(view);
             title = view.findViewById(R.id.title);
             sets = view.findViewById(R.id.sets);
@@ -45,20 +51,43 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
             timeTitle = view.findViewById(R.id.timeTitle);
             reps = view.findViewById(R.id.reps);
             deleteImage = view.findViewById(R.id.image_delete);
-            view.setOnClickListener(this);
-            this.oic = oic;
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener!=null){
+                        int position = getAdapterPosition();
+                        if(position!= RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
+
+            deleteImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener!=null){
+                        int position = getAdapterPosition();
+                        if(position!= RecyclerView.NO_POSITION){
+                            listener.onDeleteClick(position);
+                        }
+                    }
+                }
+            });
+
         }
 
 
-        @Override
-        public void onClick(View v) {
-            oic.onImageClick(getAdapterPosition());
-        }
+//        @Override
+//        public void onClick(View v) {
+//            oic.onImageClick(getAdapterPosition());
+//        }
     }
 
-    public ExerciseAdapter(List<Exercise> exerciseList, onItemClickListener mOnItemClickListener) {
+    public ExerciseAdapter(List<Exercise> exerciseList) {
         this.exercisesList = exerciseList;
-        this.mOnItemClickListener = mOnItemClickListener;
+
     }
 
     public void setExercisesList(List<Exercise> exercisesList) {

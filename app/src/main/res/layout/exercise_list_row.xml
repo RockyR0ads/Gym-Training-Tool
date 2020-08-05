@@ -11,7 +11,7 @@
     android:paddingBottom="@dimen/row_padding_vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="10dp">
+    android:paddingTop="5dp">
 
     <TextView
         android:id="@+id/title"
@@ -40,7 +40,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:gravity="center_horizontal"
-        android:layout_marginRight="90dp"
+        android:layout_marginRight="250dp"
         android:textColor="@color/colorPrimaryDark"
         android:layout_height="wrap_content"
         android:layout_below="@id/title" />
@@ -74,11 +74,11 @@
     <com.google.android.material.textfield.TextInputLayout
 
         android:layout_below="@id/setsTitle"
-        android:layout_width="40dp"
+        android:layout_width="50dp"
 
         android:layout_height="50dp"
         android:textColor="@color/primaryTextColor"
-        android:layout_marginLeft="135dp"
+        android:layout_marginLeft="55dp"
 
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
 
@@ -103,7 +103,7 @@
         android:padding="0dp"
         android:layout_height="50dp"
         android:textColor="@color/primaryTextColor"
-        android:layout_marginLeft="50dp"
+        android:layout_marginLeft="120dp"
         android:layout_marginTop="0dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
 
@@ -127,7 +127,7 @@
 
         android:layout_height="50dp"
         android:textColor="@color/primaryTextColor"
-        android:layout_marginLeft="180dp"
+        android:layout_marginLeft="220dp"
 
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
 
@@ -150,7 +150,7 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="240dp"
+        android:layout_marginLeft="300dp"
         android:layout_below="@id/setsTitle"
         android:layout_centerVertical="true"
         android:width="100dp"
@@ -161,7 +161,7 @@
     <TextView
         android:id="@+id/weightTitle"
         android:layout_width="match_parent"
-        android:layout_marginRight="230dp"
+        android:layout_marginRight="80dp"
         android:gravity="center_horizontal"
         android:paddingTop="5dp"
         android:textSize="18sp"
@@ -172,15 +172,16 @@
 
 
     <ImageView
-        android:layout_below="@id/title"
-        android:layout_marginTop="30dp"
-        android:layout_alignParentRight="true"
+
+        android:layout_alignRight="@id/title"
+
         android:id="@+id/image_delete"
         android:layout_width="50dp"
-        android:layout_marginLeft="10dp"
+
+        android:paddingBottom="10dp"
         android:layout_height="50dp"
         android:src="@drawable/ic_delete">
-        android:contentDescription="delete row"
+
     </ImageView>
 
     <TextView
@@ -189,7 +190,7 @@
         android:gravity="center_horizontal"
         android:paddingTop="5dp"
         android:textSize="18sp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="100dp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"
         android:layout_height="wrap_content"
