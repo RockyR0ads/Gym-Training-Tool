@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
         public TextView title, setsTitle, weightTitle,timeTitle,repsTitle;
         public TextInputEditText sets,time,weight,reps;
         public ImageView deleteImage;
-
+        public RelativeLayout viewBackground, viewForeground;
 
 
         public MyViewHolder(View view, final onItemClickListener listener) {
@@ -51,6 +52,8 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
             timeTitle = view.findViewById(R.id.timeTitle);
             reps = view.findViewById(R.id.reps);
             deleteImage = view.findViewById(R.id.image_delete);
+            viewForeground = view.findViewById(R.id.view_foreground);
+            viewBackground = view.findViewById(R.id.view_background);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,6 +127,20 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
         holder.repsTitle.setText("Reps");
         holder.reps.setText(String.valueOf(exercise.getReps()));
 
+    }
+
+    public void removeItem(int position) {
+        exercisesList.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Exercise exercise, int position) {
+        exercisesList.add(position, exercise);
+        // notify item added by position
+        notifyItemInserted(position);
     }
 
     @Override

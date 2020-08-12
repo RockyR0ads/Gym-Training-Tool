@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        
         final TabLayout tabLayout = findViewById(R.id.tabBar);
         TabItem tools = findViewById(R.id.tab1);
         TabItem grip = findViewById(R.id.tab2);
