@@ -1,7 +1,6 @@
 package com.example.gymtrainingtool;
 
 import android.graphics.Canvas;
-
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;

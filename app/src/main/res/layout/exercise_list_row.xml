@@ -83,23 +83,47 @@
 
     <com.google.android.material.textfield.TextInputLayout
 
+    android:layout_below="@id/setsTitle"
+    android:layout_width="40dp"
+
+    android:layout_height="50dp"
+    android:textColor="@color/primaryTextColor"
+    android:layout_marginLeft="5dp"
+
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+
+    >
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/sets"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+
+        android:textStyle="bold"
+        android:inputType="number"
+        />
+
+</com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+
         android:layout_below="@id/setsTitle"
         android:layout_width="40dp"
-
+        android:layout_marginTop="50dp"
         android:layout_height="50dp"
         android:textColor="@color/primaryTextColor"
         android:layout_marginLeft="5dp"
-
+        android:visibility="gone"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
 
         >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/sets"
+            android:id="@+id/tester"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-
             android:textStyle="bold"
             android:inputType="number"
             />
@@ -184,12 +208,8 @@
         android:id="@+id/addSets"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="300dp"
-        android:layout_below="@id/setsTitle"
-        android:layout_centerVertical="true"
-        android:width="100dp"
-        android:height="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="310dp"
         android:text="Add Set"
         android:textSize="15dp" />
 
@@ -206,19 +226,6 @@
         android:layout_below="@id/title" />
 
 
-    <ImageView
-
-        android:layout_alignRight="@id/title"
-
-        android:id="@+id/image_delete"
-        android:layout_width="50dp"
-
-        android:paddingBottom="10dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_delete">
-
-    </ImageView>
-
     <TextView
         android:id="@+id/timeTitle"
         android:layout_width="match_parent"
@@ -230,6 +237,7 @@
         android:textColor="@color/colorPrimaryDark"
         android:layout_height="wrap_content"
         android:layout_below="@id/title" />
+
 
 
 

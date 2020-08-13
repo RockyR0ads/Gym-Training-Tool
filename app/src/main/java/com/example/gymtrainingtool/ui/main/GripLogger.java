@@ -32,6 +32,7 @@ import com.example.gymtrainingtool.R;
 import com.example.gymtrainingtool.RecyclerItemTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 
 import java.io.FileInputStream;
@@ -46,11 +47,12 @@ import java.util.List;
  */
 public class GripLogger extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
-    private List<Exercise> exercisesList = new ArrayList<>();
+    //private List<Exercise> exercisesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ExerciseAdapter mAdapter;
     private EditText exerciseDialog,sets,time,weight,reps;
     private FrameLayout frameLayout;
+    public TextInputEditText test;
 
     public GripLogger() {
         // Required empty public constructor
@@ -66,34 +68,34 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         final RelativeLayout mRlayout = getView().findViewById(R.id.view_foreground);
 
         recyclerView = getView().findViewById(R.id.recycler_view);
         mAdapter = new ExerciseAdapter(readList(getContext()));
+
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
         frameLayout = getView().findViewById(R.id.Frame_layout);
-
+        test = view.findViewById(R.id.tester);
         mAdapter.setOnItemClickListener(new ExerciseAdapter.onItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Exercise exercise = mAdapter.getExercisesList().get(position);
                 Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " new implementation is WORKING HOORAY", Toast.LENGTH_SHORT).show();
+                test.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onDeleteClick(int position) {
-                exercisesList = mAdapter.getExercisesList();
-                exercisesList.remove(position);
-                mAdapter.setExercisesList(exercisesList);
-                writeList(getContext(),mAdapter.getExercisesList());
-                mAdapter.notifyItemRemoved(position);
+            public void onAddSetClick(int position) {
+
+             //   test.setVisibility(View.GONE);
+             //   mAdapter.createNewSet(view).setVisibility(View.VISIBLE);
             }
         });
 
@@ -169,6 +171,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         weight = mView.findViewById(R.id.weight);
         reps = mView.findViewById(R.id.reps);
 
+
         builder.setView(mView);
         builder.setMessage("Log new exercise");
         builder.setIcon(android.R.drawable.ic_dialog_alert)
@@ -240,6 +243,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+
         if (viewHolder instanceof ExerciseAdapter.MyViewHolder) {
 
             Exercise exercise = mAdapter.getExercisesList().get(position);
@@ -262,13 +266,20 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                  boolean  deleteItem = false;
                     // undo is selected, restore the deleted item
                     mAdapter.restoreItem(deletedItem, deletedIndex);
                 }
             });
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();
+
+           // exercisesList = mAdapter.getExercisesList();
+           // exercisesList.remove(position);
+           // mAdapter.setExercisesList(exercisesList);
+            writeList(getContext(),mAdapter.getExercisesList());
+            mAdapter.notifyItemRemoved(position);
+
         }
     }
 }
