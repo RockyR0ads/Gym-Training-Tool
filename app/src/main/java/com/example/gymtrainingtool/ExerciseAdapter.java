@@ -49,7 +49,7 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
             addSet = view.findViewById(R.id.addSets);
             viewForeground = view.findViewById(R.id.view_foreground);
             viewBackground = view.findViewById(R.id.view_background);
-            test = view.findViewById(R.id.tester);
+
 
 
             viewForeground.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +71,7 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
                         int position = getAdapterPosition();
                         if(position!= RecyclerView.NO_POSITION){
                             listener.onAddSetClick(position);
+
                         }
                     }
                 }

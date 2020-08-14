@@ -9,7 +9,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -23,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -39,7 +39,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,6 +72,12 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
         final RelativeLayout mRlayout = getView().findViewById(R.id.view_foreground);
 
+
+        final EditText myEditText = new EditText(getContext());
+        myEditText.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        
+
         recyclerView = getView().findViewById(R.id.recycler_view);
         mAdapter = new ExerciseAdapter(readList(getContext()));
 
@@ -82,24 +87,27 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
         frameLayout = getView().findViewById(R.id.Frame_layout);
-        test = view.findViewById(R.id.tester);
+
+
         mAdapter.setOnItemClickListener(new ExerciseAdapter.onItemClickListener() {
             @Override
+            //on TAP of every element
             public void onItemClick(int position) {
                 Exercise exercise = mAdapter.getExercisesList().get(position);
-                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " new implementation is WORKING HOORAY", Toast.LENGTH_SHORT).show();
-                test.setVisibility(View.VISIBLE);
+                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " is selected", Toast.LENGTH_SHORT).show();
+
+
             }
 
             @Override
             public void onAddSetClick(int position) {
 
-             //   test.setVisibility(View.GONE);
-             //   mAdapter.createNewSet(view).setVisibility(View.VISIBLE);
+                mRlayout.addView(myEditText);
+
             }
         });
 
-       //prepareExerciseData();
+      // prepareExerciseData();
         Button addSet = view.findViewById(R.id.addSets);
         FloatingActionButton fab = getView().findViewById(R.id.fab);
 

@@ -106,29 +106,7 @@
 
 </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
 
-        android:layout_below="@id/setsTitle"
-        android:layout_width="40dp"
-        android:layout_marginTop="50dp"
-        android:layout_height="50dp"
-        android:textColor="@color/primaryTextColor"
-        android:layout_marginLeft="5dp"
-        android:visibility="gone"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tester"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:textStyle="bold"
-            android:inputType="number"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
 
