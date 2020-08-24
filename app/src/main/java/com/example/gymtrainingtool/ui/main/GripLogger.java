@@ -25,8 +25,12 @@ import android.widget.FrameLayout;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.view.ViewGroup.LayoutParams;
+
+import android.widget.TableRow.LayoutParams;
 
 import com.example.gymtrainingtool.Exercise;
 import com.example.gymtrainingtool.ExerciseAdapter;
@@ -82,6 +86,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         
 
         recyclerView = getView().findViewById(R.id.recycler_view);
+        frameLayout = getView().findViewById(R.id.Frame_layout);
         mAdapter = new ExerciseAdapter(readList(getContext()));
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -90,6 +95,8 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
         viewForeground = getView().findViewById(R.id.view_foreground);
+
+
 
 
         mAdapter.setOnItemClickListener(new ExerciseAdapter.onItemClickListener() {
@@ -105,8 +112,30 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
             @Override
             public void onAddSetClick(int position) {
                 EditText myEditText = new EditText(getContext());
-                myEditText.setLayoutParams(new Gallery.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-               // viewForeground.addView(myEditText);
+
+
+                final TableLayout detailsTable = getView().findViewById(R.id.table);
+                final TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow, null);
+                TextView tv;
+
+                //Filling in cells
+//                tv = tableRow.findViewById(R.id.tableCell1);
+//                tv.setText("EMA");
+//
+//                tv = tableRow.findViewById(R.id.tableCell2);
+//                tv.setText("EMA");
+//
+//                tv = tableRow.findViewById(R.id.tableCell3);
+//                tv.setText("EMA");
+//
+//                tv = tableRow.findViewById(R.id.tableCell4);
+//                tv.setText("EMA");
+
+                //Add row to the table
+                detailsTable.addView(tableRow);
+
+               // FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 300);
+                //frameLayout.setLayoutParams(lp);
             }
         });
 
