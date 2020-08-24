@@ -22,9 +22,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.view.ViewGroup.LayoutParams;
 
 import com.example.gymtrainingtool.Exercise;
 import com.example.gymtrainingtool.ExerciseAdapter;
@@ -52,6 +54,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     private EditText exerciseDialog,sets,time,weight,reps;
     private FrameLayout frameLayout;
     public TextInputEditText test;
+    private RelativeLayout viewForeground;
 
     public GripLogger() {
         // Required empty public constructor
@@ -70,11 +73,11 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final RelativeLayout mRlayout = getView().findViewById(R.id.view_foreground);
+        // final FrameLayout mRlayout = getView().findViewById(R.id.Frame_layout);
 
 
-        final EditText myEditText = new EditText(getContext());
-        myEditText.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        EditText myEditText = new EditText(getContext());
+//        myEditText.setLayoutParams(new Gallery.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 
         
 
@@ -86,7 +89,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
-        frameLayout = getView().findViewById(R.id.Frame_layout);
+        viewForeground = getView().findViewById(R.id.view_foreground);
 
 
         mAdapter.setOnItemClickListener(new ExerciseAdapter.onItemClickListener() {
@@ -101,9 +104,9 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
             @Override
             public void onAddSetClick(int position) {
-
-                mRlayout.addView(myEditText);
-
+                EditText myEditText = new EditText(getContext());
+                myEditText.setLayoutParams(new Gallery.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+               // viewForeground.addView(myEditText);
             }
         });
 
