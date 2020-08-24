@@ -4,9 +4,7 @@ package com.example.gymtrainingtool.ui.main;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.graphics.Movie;
-import android.media.Image;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,52 +12,53 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
+import android.widget.Gallery;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.view.ViewGroup.LayoutParams;
 
 import com.example.gymtrainingtool.Exercise;
 import com.example.gymtrainingtool.ExerciseAdapter;
-import com.example.gymtrainingtool.ItemClickSupport;
 import com.example.gymtrainingtool.R;
-import com.example.gymtrainingtool.RecyclerTouchListener;
+import com.example.gymtrainingtool.RecyclerItemTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GripLogger extends Fragment{
+public class GripLogger extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
-    private List<Exercise> exercisesList = new ArrayList<>();
+    //private List<Exercise> exercisesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ExerciseAdapter mAdapter;
     private EditText exerciseDialog,sets,time,weight,reps;
+    private FrameLayout frameLayout;
+    public TextInputEditText test;
+    private RelativeLayout viewForeground;
 
     public GripLogger() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,37 +70,47 @@ public class GripLogger extends Fragment{
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final RelativeLayout mRlayout = getView().findViewById(R.id.rel);
+        // final FrameLayout mRlayout = getView().findViewById(R.id.Frame_layout);
+
+
+//        EditText myEditText = new EditText(getContext());
+//        myEditText.setLayoutParams(new Gallery.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+
+        
 
         recyclerView = getView().findViewById(R.id.recycler_view);
         mAdapter = new ExerciseAdapter(readList(getContext()));
+
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
+        viewForeground = getView().findViewById(R.id.view_foreground);
+
 
         mAdapter.setOnItemClickListener(new ExerciseAdapter.onItemClickListener() {
             @Override
+            //on TAP of every element
             public void onItemClick(int position) {
                 Exercise exercise = mAdapter.getExercisesList().get(position);
-                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " new implementation is WORKING HOORAY", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " is selected", Toast.LENGTH_SHORT).show();
+
+
             }
 
             @Override
-            public void onDeleteClick(int position) {
-                exercisesList = mAdapter.getExercisesList();
-                exercisesList.remove(position);
-                mAdapter.setExercisesList(exercisesList);
-                writeList(getContext(),mAdapter.getExercisesList());
-                mAdapter.notifyItemRemoved(position);
+            public void onAddSetClick(int position) {
+                EditText myEditText = new EditText(getContext());
+                myEditText.setLayoutParams(new Gallery.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+               // viewForeground.addView(myEditText);
             }
         });
 
-       prepareExerciseData();
+      // prepareExerciseData();
         Button addSet = view.findViewById(R.id.addSets);
         FloatingActionButton fab = getView().findViewById(R.id.fab);
 
@@ -143,6 +152,12 @@ public class GripLogger extends Fragment{
 //
 //            }
 //        }));
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,this );
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
+
+
     }
 
     private void prepareExerciseData() {
@@ -166,6 +181,7 @@ public class GripLogger extends Fragment{
         time = mView.findViewById(R.id.time);
         weight = mView.findViewById(R.id.weight);
         reps = mView.findViewById(R.id.reps);
+
 
         builder.setView(mView);
         builder.setMessage("Log new exercise");
@@ -236,6 +252,47 @@ public class GripLogger extends Fragment{
         }
     }
 
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+
+        if (viewHolder instanceof ExerciseAdapter.MyViewHolder) {
+
+            Exercise exercise = mAdapter.getExercisesList().get(position);
+
+
+            // get the removed item name to display it in snack bar
+           // String name = exercisesList.get(viewHolder.getAdapterPosition()).getTitle();
+            String title = exercise.getTitle();
+            // backup of removed item for undo purpose
+          //  final Exercise deletedItem = exercisesList.get(viewHolder.getAdapterPosition());
+            final Exercise deletedItem = exercise;
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            mAdapter.removeItem(viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(frameLayout, title + " removed from cart!", Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                  boolean  deleteItem = false;
+                    // undo is selected, restore the deleted item
+                    mAdapter.restoreItem(deletedItem, deletedIndex);
+                }
+            });
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();
+
+           // exercisesList = mAdapter.getExercisesList();
+           // exercisesList.remove(position);
+           // mAdapter.setExercisesList(exercisesList);
+            writeList(getContext(),mAdapter.getExercisesList());
+            mAdapter.notifyItemRemoved(position);
+
+        }
+    }
 }
 
 
