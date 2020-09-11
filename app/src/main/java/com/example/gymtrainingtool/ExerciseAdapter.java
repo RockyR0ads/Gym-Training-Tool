@@ -144,6 +144,13 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
         notifyItemInserted(position);
     }
 
+    public void addRow(View view , int position) {
+       // exercisesList.add(position, view);
+        // notify item added by position
+        notifyItemInserted(position);
+    }
+
+
     @Override
     public int getItemCount() {
         return exercisesList.size();
