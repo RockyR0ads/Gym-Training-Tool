@@ -39,6 +39,7 @@ import com.example.gymtrainingtool.R;
 import com.example.gymtrainingtool.RecyclerItemTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 
 
@@ -58,12 +59,14 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     private ExerciseAdapter mAdapter;
     private EditText exerciseDialog,sets,time,weight,reps;
     private FrameLayout frameLayout;
-    public TextInputEditText test;
+    public TextInputEditText tester;
     private RelativeLayout viewForeground;
 
     public GripLogger() {
         // Required empty public constructor
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,11 +121,14 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
                 TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow, null);
 
 
-                Exercise exercise = mAdapter.getExercisesList().get(position);
+
                 //Add row to the table
                 //exercise.setTitle();
                // mAdapter.addView(tableRow);
+                
                 detailsTable.addView(tableRow);
+               // detailsTable.addView(row,position);
+
                // mAdapter.notifyDataSetChanged();
                // FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 300);
                 //frameLayout.setLayoutParams(lp);

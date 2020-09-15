@@ -105,26 +105,39 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
         exercisesList.add(e);
     }
 
+
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row, parent, false);
 
-        return new MyViewHolder(itemView,mOnItemClickListener);
+        View view =null;
+        RecyclerView.ViewHolder viewHolder = null;
+
+
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row, parent, false);
+
+
+            return new MyViewHolder(itemView,mOnItemClickListener);
+
+
+
+
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Exercise exercise = exercisesList.get(position);
 
-        holder.title.setText(exercise.getTitle());
-        holder.sets.setText(exercise.getSets());
-        holder.time.setText(exercise.getTime());
-        holder.setsTitle.setText("Sets");
-        holder.weightTitle.setText("Weight");
-        holder.weight.setText(exercise.getWeight());
-        holder.timeTitle.setText("Seconds");
-        holder.repsTitle.setText("Reps");
-        holder.reps.setText(String.valueOf(exercise.getReps()));
+
+            holder.title.setText(exercise.getTitle());
+            holder.sets.setText(exercise.getSets());
+            holder.time.setText(exercise.getTime());
+            holder.setsTitle.setText("Sets");
+            holder.weightTitle.setText("Weight");
+            holder.weight.setText(exercise.getWeight());
+            holder.timeTitle.setText("Seconds");
+            holder.repsTitle.setText("Reps");
+            holder.reps.setText(String.valueOf(exercise.getReps()));
 
 
     }
