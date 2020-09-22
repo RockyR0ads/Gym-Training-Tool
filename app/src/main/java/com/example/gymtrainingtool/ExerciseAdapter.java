@@ -1,5 +1,6 @@
 package com.example.gymtrainingtool;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
-public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyViewHolder>{
+public  class ExerciseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private onItemClickListener mOnItemClickListener;
     private List<Exercise> exercisesList;
 
@@ -26,10 +27,19 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
         mOnItemClickListener = listener;
     }
 
+    public static class MyViewHolder1 extends RecyclerView.ViewHolder {
+        TextView tester;
+
+        public MyViewHolder1(View itemView,final onItemClickListener listener) {
+            super(itemView);
+            this.tester = itemView.findViewById(R.id.sets1);
+        }
+    }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView title, setsTitle, weightTitle,timeTitle,repsTitle;
-        public TextInputEditText sets,time,weight,reps,test;
+        public TextInputEditText sets,time,weight,reps;
         public Button addSet;
         public RelativeLayout viewBackground, viewForeground;
 
@@ -107,17 +117,26 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
 
 
 
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view =null;
-        RecyclerView.ViewHolder viewHolder = null;
+        View view = null;
+
+        if(viewType == VIEW_ORDINARY){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row, parent, false);
+            return new MyViewHolder(view,mOnItemClickListener);
+
+        }else{
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row_add_set, parent, false);
+            return new MyViewHolder1(view,mOnItemClickListener);
+        }
 
 
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row, parent, false);
-
-
-            return new MyViewHolder(itemView,mOnItemClickListener);
+//            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row, parent, false);
+//
+//
+           // return new MyViewHolder(view,mOnItemClickListener);
 
 
 
@@ -125,21 +144,45 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         Exercise exercise = exercisesList.get(position);
 
+     //   if(holder.getItemViewType() == VIEW_WITH_EXTRA_TEXT_VIEW){
+           // ((MyViewHolder1)holder).sets1.setText("I hope this works");
 
-            holder.title.setText(exercise.getTitle());
-            holder.sets.setText(exercise.getSets());
-            holder.time.setText(exercise.getTime());
-            holder.setsTitle.setText("Sets");
-            holder.weightTitle.setText("Weight");
-            holder.weight.setText(exercise.getWeight());
-            holder.timeTitle.setText("Seconds");
-            holder.repsTitle.setText("Reps");
-            holder.reps.setText(String.valueOf(exercise.getReps()));
+     //   }else {
 
+//            holder.title.setText(exercise.getTitle());
+//            holder.sets.setText(exercise.getSets());
+//            holder.time.setText(exercise.getTime());
+//            holder.setsTitle.setText("Sets");
+//            holder.weightTitle.setText("Weight");
+//            holder.weight.setText(exercise.getWeight());
+//            holder.timeTitle.setText("Seconds");
+//            holder.repsTitle.setText("Reps");
+//            holder.reps.setText(String.valueOf(exercise.getReps()));
+     //   }
 
+        if (getItemViewType(position) == VIEW_ORDINARY) {
+            ((MyViewHolder)
+                    viewHolder).title.setText(exercise.getTitle());
+        } else {
+            ((MyViewHolder1)
+                    viewHolder).tester.setText("3");
+        }
+
+    }
+
+    private static final int VIEW_ORDINARY = 0;
+    private static final int VIEW_WITH_EXTRA_TEXT_VIEW = 1;
+
+    @Override
+    public int getItemViewType(int position) {
+        if(position == 1) {
+            return VIEW_WITH_EXTRA_TEXT_VIEW;
+        } else {
+            return VIEW_ORDINARY;
+        }
     }
 
 
@@ -156,13 +199,6 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
         // notify item added by position
         notifyItemInserted(position);
     }
-
-    public void addRow(View view , int position) {
-       // exercisesList.add(position, view);
-        // notify item added by position
-        notifyItemInserted(position);
-    }
-
 
     @Override
     public int getItemCount() {

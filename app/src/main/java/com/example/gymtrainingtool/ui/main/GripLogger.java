@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,28 +114,48 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
             @Override
             public void onAddSetClick(int position) {
+                EditText myEditText = new EditText(getContext());
 
 
-                TableLayout detailsTable = getView().findViewById(R.id.table);
-                TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow, null);
+                //final TableLayout detailsTable = getView().findViewById(R.id.table);
+                //final TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow, null);
+ //               TextView tv;
 
+                //Filling in cells
+//                tv = tableRow.findViewById(R.id.tableCell1);
+//                tv.setText("EMA");
+//
+//                tv = tableRow.findViewById(R.id.tableCell2);
+//                tv.setText("EMA");
+//
+//                tv = tableRow.findViewById(R.id.tableCell3);
+//                tv.setText("EMA");
+//
+//                tv = tableRow.findViewById(R.id.tableCell4);
+//                tv.setText("EMA");
 
+                mAdapter.getItemViewType(position);
 
                 //Add row to the table
                 //exercise.setTitle();
                // mAdapter.addView(tableRow);
                 
-                detailsTable.addView(tableRow);
+               // detailsTable.addView(tableRow);
                // detailsTable.addView(row,position);
 
                // mAdapter.notifyDataSetChanged();
+
+                //Add row to the table
+              //  detailsTable.addView(tableRow);
+
+
                // FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 300);
                 //frameLayout.setLayoutParams(lp);
             }
         });
 
       // prepareExerciseData();
-
+        Button addSet = view.findViewById(R.id.addSets);
         FloatingActionButton fab = getView().findViewById(R.id.fab);
 
 
