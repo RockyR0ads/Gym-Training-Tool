@@ -7,6 +7,9 @@ public class Exercise implements Serializable{
     private String title,time,sets,weight;
 
 
+
+    private boolean anotherSet;
+
     int reps;
 
     public Exercise () {
@@ -18,6 +21,14 @@ public class Exercise implements Serializable{
         this.weight = weight;
         this.time = time;
         this.reps = reps;
+    }
+
+    public boolean isAnotherSet() {
+        return anotherSet;
+    }
+
+    public void setAnotherSet(boolean anotherSet) {
+        this.anotherSet = anotherSet;
     }
 
     public String getTitle() {

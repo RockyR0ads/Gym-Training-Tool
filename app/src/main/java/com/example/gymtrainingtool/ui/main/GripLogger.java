@@ -34,6 +34,7 @@ import android.widget.TableRow.LayoutParams;
 
 import com.example.gymtrainingtool.Exercise;
 import com.example.gymtrainingtool.ExerciseAdapter;
+import com.example.gymtrainingtool.MainActivity;
 import com.example.gymtrainingtool.R;
 import com.example.gymtrainingtool.RecyclerItemTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -60,6 +61,16 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     private FrameLayout frameLayout;
     public TextInputEditText tester;
     private RelativeLayout viewForeground;
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
+
+    private boolean check = false;
 
     public GripLogger() {
         // Required empty public constructor
@@ -134,7 +145,13 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 //                tv = tableRow.findViewById(R.id.tableCell4);
 //                tv.setText("EMA");
 
-                mAdapter.getItemViewType(position);
+
+                    mAdapter.toggleItemViewType(position);
+
+
+               mAdapter.notifyItemChanged(position);
+
+                //recyclerView.setAdapter(mAdapter);
 
                 //Add row to the table
                 //exercise.setTitle();
