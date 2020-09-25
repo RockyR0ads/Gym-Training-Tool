@@ -4,10 +4,7 @@ import java.io.Serializable;
 public class Exercise implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    private String title,time,sets,weight;
-
-
-
+    private String title,time,weight;
     private boolean anotherSet;
 
     int reps;
@@ -15,9 +12,8 @@ public class Exercise implements Serializable{
     public Exercise () {
     }
 
-    public Exercise(String title, String sets,String weight, String time, int reps) {
+    public Exercise(String title,String weight, String time, int reps) {
         this.title = title;
-        this.sets = sets;
         this.weight = weight;
         this.time = time;
         this.reps = reps;
@@ -46,10 +42,6 @@ public class Exercise implements Serializable{
     public void setYear(String year) {
         this.time = time;
     }
-
-    public String getSets() { return sets; }
-
-    public void setSets(String sets) { this.sets = sets; }
 
     public String getWeight() { return weight; }
 

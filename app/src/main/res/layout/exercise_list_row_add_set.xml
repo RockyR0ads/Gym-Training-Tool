@@ -115,7 +115,6 @@
 
         android:layout_below="@id/setsTitle"
         android:layout_width="40dp"
-
         android:layout_height="50dp"
         android:textColor="@color/primaryTextColor"
         android:layout_marginLeft="5dp"
@@ -125,7 +124,7 @@
         >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/sets1"
+            android:id="@+id/set2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
@@ -166,6 +165,31 @@
     <com.google.android.material.textfield.TextInputLayout
 
         android:layout_below="@id/setsTitle"
+        android:layout_width="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_height="50dp"
+        android:textColor="@color/primaryTextColor"
+        android:layout_marginLeft="55dp"
+
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/repsSet2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+
+            android:textStyle="bold"
+            android:inputType="number"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+
+        android:layout_below="@id/setsTitle"
         android:layout_width="80dp"
         android:padding="0dp"
         android:layout_height="50dp"
@@ -178,6 +202,54 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/weight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:inputType="number"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+
+        android:layout_below="@id/setsTitle"
+        android:layout_width="80dp"
+        android:padding="0dp"
+        android:layout_height="50dp"
+        android:textColor="@color/primaryTextColor"
+        android:layout_marginLeft="120dp"
+        android:layout_marginTop="50dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/weightSecondSet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:inputType="number"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+
+        android:layout_below="@id/setsTitle"
+        android:layout_width="60dp"
+        android:layout_marginTop="50dp"
+        android:layout_height="50dp"
+        android:textColor="@color/primaryTextColor"
+        android:layout_marginLeft="220dp"
+
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/timeSecondSet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textStyle="bold"
@@ -210,6 +282,8 @@
             />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+
 
 
 

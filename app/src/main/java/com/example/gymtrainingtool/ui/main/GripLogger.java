@@ -125,49 +125,10 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
             @Override
             public void onAddSetClick(int position) {
-                EditText myEditText = new EditText(getContext());
+                Exercise exercise =  mAdapter.getExercisesList().get(position);
+                exercise.setAnotherSet(true);
+                mAdapter.notifyItemChanged(position);
 
-
-                //final TableLayout detailsTable = getView().findViewById(R.id.table);
-                //final TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow, null);
- //               TextView tv;
-
-                //Filling in cells
-//                tv = tableRow.findViewById(R.id.tableCell1);
-//                tv.setText("EMA");
-//
-//                tv = tableRow.findViewById(R.id.tableCell2);
-//                tv.setText("EMA");
-//
-//                tv = tableRow.findViewById(R.id.tableCell3);
-//                tv.setText("EMA");
-//
-//                tv = tableRow.findViewById(R.id.tableCell4);
-//                tv.setText("EMA");
-
-
-                    mAdapter.toggleItemViewType(position);
-
-
-               mAdapter.notifyItemChanged(position);
-
-                //recyclerView.setAdapter(mAdapter);
-
-                //Add row to the table
-                //exercise.setTitle();
-               // mAdapter.addView(tableRow);
-                
-               // detailsTable.addView(tableRow);
-               // detailsTable.addView(row,position);
-
-               // mAdapter.notifyDataSetChanged();
-
-                //Add row to the table
-              //  detailsTable.addView(tableRow);
-
-
-               // FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 300);
-                //frameLayout.setLayoutParams(lp);
             }
         });
 
@@ -222,10 +183,10 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     }
 
     private void prepareExerciseData() {
-        Exercise exercise = new Exercise("Single Hand Barbell Hold", "3","60kg", "15",1);
+        Exercise exercise = new Exercise("Single Hand Barbell Hold","60kg", "15",1);
         mAdapter.addExercise(exercise);
 
-        exercise = new Exercise("Double Overhand Barbell Hold", "3", "100kg","20",1);
+        exercise = new Exercise("Double Overhand Barbell Hold","100kg","20",1);
         mAdapter.addExercise(exercise);
         writeList(getContext(),mAdapter.getExercisesList());
         mAdapter.notifyDataSetChanged();
@@ -251,7 +212,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // do what when you click add
-                        Exercise exercise = new Exercise(exerciseDialog.getText().toString(),sets.getText().toString() ,weight.getText().toString(),time.getText().toString(),Integer.parseInt(reps.getText().toString()));
+                        Exercise exercise = new Exercise(exerciseDialog.getText().toString(),weight.getText().toString(),time.getText().toString(),Integer.parseInt(reps.getText().toString()));
                         mAdapter.addExercise(exercise);
                         writeList(getContext(),mAdapter.getExercisesList());
                         mAdapter.notifyDataSetChanged();
