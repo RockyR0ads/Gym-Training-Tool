@@ -22,24 +22,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.Gallery;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import android.widget.TableRow.LayoutParams;
 
 import com.example.gymtrainingtool.Exercise;
 import com.example.gymtrainingtool.ExerciseAdapter;
-import com.example.gymtrainingtool.MainActivity;
+import com.example.gymtrainingtool.ExerciseChild;
+import com.example.gymtrainingtool.ExerciseChildAdapter;
 import com.example.gymtrainingtool.R;
 import com.example.gymtrainingtool.RecyclerItemTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 
 
@@ -47,6 +40,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -99,9 +93,9 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
         
 
-        recyclerView = getView().findViewById(R.id.recycler_view);
+        recyclerView = getView().findViewById(R.id.parent_recyclerview);
         frameLayout = getView().findViewById(R.id.Frame_layout);
-        mAdapter = new ExerciseAdapter(readList(getContext()));
+        mAdapter = new ExerciseAdapter(ParentItemList());
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -109,6 +103,22 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
         viewForeground = getView().findViewById(R.id.view_foreground);
+
+
+
+        // Initialise the Linear layout manager
+       // LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+
+        // Pass the arguments
+        // to the parentItemAdapter.
+        // These arguments are passed
+        // using a method ParentItemList()
+       // ParentItemAdapter parentItemAdapter = new ParentItemAdapter(ParentItemList());
+
+        // Set the layout manager
+        // and adapter for items
+        // of the parent recyclerview
+
 
 
 
@@ -180,6 +190,30 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
 
 
+    }
+
+    private List<Exercise> ParentItemList()
+    {
+        List<Exercise> itemList = new ArrayList<>();
+
+        Exercise item = new Exercise("Title 1", ChildItemList());itemList.add(item);
+        Exercise item1 = new Exercise("Title 2", ChildItemList());itemList.add(item1);
+        Exercise item2 = new Exercise("Title 3", ChildItemList());itemList.add(item2);
+        Exercise item3 = new Exercise("Title 4", ChildItemList());itemList.add(item3);
+
+        return itemList;
+    }
+
+    private List<ExerciseChild> ChildItemList()
+    {
+        List<ExerciseChild> ChildItemList = new ArrayList<>();
+
+        ChildItemList.add(new ExerciseChild("Card 1"));
+        ChildItemList.add(new ExerciseChild("Card 2"));
+        ChildItemList.add(new ExerciseChild("Card 3"));
+        ChildItemList.add(new ExerciseChild("Card 4"));
+
+        return ChildItemList;
     }
 
     private void prepareExerciseData() {
@@ -277,7 +311,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
 
-        if (viewHolder instanceof ExerciseAdapter.MyViewHolder) {
+        if (viewHolder instanceof ExerciseAdapter.ParentViewHolder) {
 
             Exercise exercise = mAdapter.getExercisesList().get(position);
 

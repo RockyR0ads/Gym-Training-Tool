@@ -1,32 +1,40 @@
 package com.example.gymtrainingtool;
 import java.io.Serializable;
-import java.util.List;
 
-public class Exercise implements Serializable{
+public class ExerciseChild implements Serializable{
 
     private static final long serialVersionUID = 1L;
     private String title,time,weight;
     private boolean anotherSet;
-    private String ParentItemTitle;
-    private List<ExerciseChild> ChildItemList;
+    private String ChildItemTitle;
 
     int reps;
 
-    public Exercise () {
+    public ExerciseChild() {
     }
 
-    public Exercise(String title,String weight, String time, int reps) {
+    public ExerciseChild(String title, String weight, String time, int reps) {
         this.title = title;
         this.weight = weight;
         this.time = time;
         this.reps = reps;
     }
-
-    public Exercise(String ParentItemTitle,List<ExerciseChild> ChildItemList ) {
-        this.ParentItemTitle = ParentItemTitle;
-        this.ChildItemList = ChildItemList;
+    public ExerciseChild(String childItemTitle) {
+        this.ChildItemTitle = childItemTitle;
     }
 
+    // Getter and Setter method
+    // for the parameter
+    public String getChildItemTitle()
+    {
+        return ChildItemTitle;
+    }
+
+    public void setChildItemTitle(
+            String childItemTitle)
+    {
+        ChildItemTitle = childItemTitle;
+    }
 
     public boolean isAnotherSet() {
         return anotherSet;
@@ -59,28 +67,4 @@ public class Exercise implements Serializable{
     public int getReps() { return reps; }
 
     public void setReps(int reps) { this.reps = reps; }
-
-
-
-    public String getParentItemTitle()
-    {
-        return ParentItemTitle;
-    }
-
-    public void setParentItemTitle(
-            String parentItemTitle)
-    {
-        ParentItemTitle = parentItemTitle;
-    }
-
-    public List<ExerciseChild> getChildItemList()
-    {
-        return ChildItemList;
-    }
-
-    public void setChildItemList(
-            List<ExerciseChild> childItemList)
-    {
-        ChildItemList = childItemList;
-    }
 }
