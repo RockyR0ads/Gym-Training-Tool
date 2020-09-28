@@ -25,15 +25,21 @@ import android.widget.FrameLayout;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.view.ViewGroup.LayoutParams;
+
+import android.widget.TableRow.LayoutParams;
 
 import com.example.gymtrainingtool.Exercise;
 import com.example.gymtrainingtool.ExerciseAdapter;
+import com.example.gymtrainingtool.MainActivity;
 import com.example.gymtrainingtool.R;
 import com.example.gymtrainingtool.RecyclerItemTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 
 
@@ -53,12 +59,24 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     private ExerciseAdapter mAdapter;
     private EditText exerciseDialog,sets,time,weight,reps;
     private FrameLayout frameLayout;
-    public TextInputEditText test;
+    public TextInputEditText tester;
     private RelativeLayout viewForeground;
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
+
+    private boolean check = false;
 
     public GripLogger() {
         // Required empty public constructor
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,6 +100,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         
 
         recyclerView = getView().findViewById(R.id.recycler_view);
+        frameLayout = getView().findViewById(R.id.Frame_layout);
         mAdapter = new ExerciseAdapter(readList(getContext()));
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -90,6 +109,8 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
         viewForeground = getView().findViewById(R.id.view_foreground);
+
+
 
 
         mAdapter.setOnItemClickListener(new ExerciseAdapter.onItemClickListener() {
@@ -104,9 +125,10 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
             @Override
             public void onAddSetClick(int position) {
-                EditText myEditText = new EditText(getContext());
-                myEditText.setLayoutParams(new Gallery.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-               // viewForeground.addView(myEditText);
+                Exercise exercise =  mAdapter.getExercisesList().get(position);
+                exercise.setAnotherSet(true);
+                mAdapter.notifyItemChanged(position);
+
             }
         });
 
@@ -161,10 +183,10 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     }
 
     private void prepareExerciseData() {
-        Exercise exercise = new Exercise("Single Hand Barbell Hold", "3","60kg", "15",1);
+        Exercise exercise = new Exercise("Single Hand Barbell Hold","60kg", "15",1);
         mAdapter.addExercise(exercise);
 
-        exercise = new Exercise("Double Overhand Barbell Hold", "3", "100kg","20",1);
+        exercise = new Exercise("Double Overhand Barbell Hold","100kg","20",1);
         mAdapter.addExercise(exercise);
         writeList(getContext(),mAdapter.getExercisesList());
         mAdapter.notifyDataSetChanged();
@@ -190,7 +212,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // do what when you click add
-                        Exercise exercise = new Exercise(exerciseDialog.getText().toString(),sets.getText().toString() ,weight.getText().toString(),time.getText().toString(),Integer.parseInt(reps.getText().toString()));
+                        Exercise exercise = new Exercise(exerciseDialog.getText().toString(),weight.getText().toString(),time.getText().toString(),Integer.parseInt(reps.getText().toString()));
                         mAdapter.addExercise(exercise);
                         writeList(getContext(),mAdapter.getExercisesList());
                         mAdapter.notifyDataSetChanged();

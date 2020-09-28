@@ -1,5 +1,6 @@
 package com.example.gymtrainingtool;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
-public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyViewHolder>{
+public  class ExerciseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private onItemClickListener mOnItemClickListener;
     private List<Exercise> exercisesList;
 
@@ -28,8 +29,8 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView title, setsTitle, weightTitle,timeTitle,repsTitle;
-        public TextInputEditText sets,time,weight,reps,test;
+        public TextView title, setsTitle, weightTitle,timeTitle,repsTitle, secondSet;
+        public TextInputEditText sets,time,weight,reps;
         public Button addSet;
         public RelativeLayout viewBackground, viewForeground;
 
@@ -49,7 +50,7 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
             addSet = view.findViewById(R.id.addSets);
             viewForeground = view.findViewById(R.id.view_foreground);
             viewBackground = view.findViewById(R.id.view_background);
-
+            secondSet = view.findViewById(R.id.set2);
 
 
             viewForeground.setOnClickListener(new View.OnClickListener() {
@@ -105,30 +106,78 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyVie
         exercisesList.add(e);
     }
 
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row, parent, false);
 
-        return new MyViewHolder(itemView,mOnItemClickListener);
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        View view = null;
+
+        if(viewType == SET_1){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row, parent, false);
+
+        }else{
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row_add_set, parent, false);
+        }
+        return new MyViewHolder(view,mOnItemClickListener);
+
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         Exercise exercise = exercisesList.get(position);
 
-        holder.title.setText(exercise.getTitle());
-        holder.sets.setText(exercise.getSets());
-        holder.time.setText(exercise.getTime());
-        holder.setsTitle.setText("Sets");
-        holder.weightTitle.setText("Weight");
-        holder.weight.setText(exercise.getWeight());
-        holder.timeTitle.setText("Seconds");
-        holder.repsTitle.setText("Reps");
-        holder.reps.setText(String.valueOf(exercise.getReps()));
+        switch(viewHolder.getItemViewType()){
+            case SET_1:
+                ((MyViewHolder)viewHolder).title.setText(exercise.getTitle());
+                ((MyViewHolder)viewHolder).setsTitle.setText("Sets");
+                ((MyViewHolder)viewHolder).repsTitle.setText("Reps");
+                ((MyViewHolder)viewHolder).weightTitle.setText("Weight");
+                ((MyViewHolder)viewHolder).timeTitle.setText("Seconds");
+                ((MyViewHolder)viewHolder).sets.setText("1");
+
+                ((MyViewHolder)viewHolder).title.setText(exercise.getTitle());
+                ((MyViewHolder)viewHolder).weight.setText(exercise.getWeight());
+                ((MyViewHolder)viewHolder).reps.setText(String.valueOf(exercise.getReps()));
+                ((MyViewHolder)viewHolder).time.setText(exercise.getTime());
+
+                break;
+            case SET_1_TO_2:
+                ((MyViewHolder)viewHolder).sets.setText("1");
+                ((MyViewHolder)viewHolder).secondSet.setText("2");
+                ((MyViewHolder)viewHolder).setsTitle.setText("Sets");
+                ((MyViewHolder)viewHolder).repsTitle.setText("Reps");
+                ((MyViewHolder)viewHolder).weightTitle.setText("Weight");
+                ((MyViewHolder)viewHolder).timeTitle.setText("Seconds");
+
+                ((MyViewHolder)viewHolder).title.setText(exercise.getTitle());
+                ((MyViewHolder)viewHolder).weight.setText(exercise.getWeight());
+                ((MyViewHolder)viewHolder).reps.setText(String.valueOf(exercise.getReps()));
+                ((MyViewHolder)viewHolder).time.setText(exercise.getTime());
+
+                break;
+            case SET_1_TO_3:
+
+        }
 
 
     }
 
+    private static final int SET_1 = 0;
+    private static final int SET_1_TO_2 = 1;
+    private static final int SET_1_TO_3 = 2;
+
+    @Override
+    public int getItemViewType(int position) {
+      Exercise exercise = exercisesList.get(position);
+        if(exercise.isAnotherSet()) {
+            return SET_1_TO_2;
+        } else {
+            return SET_1;
+        }
+
+    }
 
     public void removeItem(int position) {
         exercisesList.remove(position);
