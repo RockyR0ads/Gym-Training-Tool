@@ -196,22 +196,27 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     {
         List<Exercise> itemList = new ArrayList<>();
 
-        Exercise item = new Exercise("Title 1", ChildItemList());itemList.add(item);
-        Exercise item1 = new Exercise("Title 2", ChildItemList());itemList.add(item1);
-        Exercise item2 = new Exercise("Title 3", ChildItemList());itemList.add(item2);
-        Exercise item3 = new Exercise("Title 4", ChildItemList());itemList.add(item3);
+        Exercise item = new Exercise("Single Hand Barbell Hold", ChildItemList());
+        itemList.add(item);
+        Exercise item1 = new Exercise("Double Overhand Barbell Hold", ChildItemList());
+        itemList.add(item1);
+//        Exercise item2 = new Exercise("Title 3", ChildItemList());
+//        itemList.add(item2);
+//        Exercise item3 = new Exercise("Title 4", ChildItemList());
+//        itemList.add(item3);
 
-        return itemList;
+
+
+
+       return itemList;
     }
 
     private List<ExerciseChild> ChildItemList()
     {
         List<ExerciseChild> ChildItemList = new ArrayList<>();
 
-        ChildItemList.add(new ExerciseChild("Card 1"));
-        ChildItemList.add(new ExerciseChild("Card 2"));
-        ChildItemList.add(new ExerciseChild("Card 3"));
-        ChildItemList.add(new ExerciseChild("Card 4"));
+        ChildItemList.add(new ExerciseChild("60kg", "15",1));
+        ChildItemList.add(new ExerciseChild("100kg","20",1));
 
         return ChildItemList;
     }

@@ -25,41 +25,31 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
 
     @NonNull
     @Override
-    public ChildViewHolder onCreateViewHolder(
-            @NonNull ViewGroup viewGroup,
-            int i)
+    public ChildViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
     {
 
         // Here we inflate the corresponding
         // layout of the child item
-        View view = LayoutInflater
-                .from(viewGroup.getContext())
-                .inflate(
-                        R.layout.exercise_list_row,
-                        viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.exercise_list_row, viewGroup, false);
 
         return new ChildViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(
-            @NonNull ChildViewHolder childViewHolder,
-            int position)
+    public void onBindViewHolder(@NonNull ChildViewHolder childViewHolder, int position)
     {
 
         // Create an instance of the ChildItem
         // class for the given position
-        ExerciseChild childItem
-                = ChildItemList.get(position);
+        ExerciseChild childItem = ChildItemList.get(position);
 
         // For the created instance, set title.
         // No need to set the image for
         // the ImageViews because we have
         // provided the source for the images
         // in the layout file itself
-        childViewHolder
-                .ChildItemTitle
-                .setText(childItem.getChildItemTitle());
+        childViewHolder.reps.setText("2");
+
     }
 
     @Override
@@ -80,13 +70,25 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
     // in the child RecyclerView
     static class ChildViewHolder extends RecyclerView.ViewHolder {
 
-        TextView ChildItemTitle;
+       // public TextView setsTitle, weightTitle,timeTitle,repsTitle;
+        public TextInputEditText sets,time,weight,reps;
+        public RelativeLayout viewBackground, viewForeground;
 
         ChildViewHolder(View itemView)
         {
             super(itemView);
-            ChildItemTitle
-                    = itemView.findViewById(R.id.repsTitle);
+
+            reps = itemView.findViewById(R.id.reps);
+            sets = itemView.findViewById(R.id.sets);
+            time = itemView.findViewById(R.id.time);
+            weight = itemView.findViewById(R.id.weight);
+//            setsTitle = itemView.findViewById(R.id.setsTitle);
+//            weightTitle =itemView.findViewById(R.id.weightTitle);
+//            repsTitle =itemView.findViewById(R.id.repsTitle);
+//            timeTitle = itemView.findViewById(R.id.timeTitle);
+            viewForeground = itemView.findViewById(R.id.view_foreground);
+            viewBackground = itemView.findViewById(R.id.view_background);
+
         }
     }
 

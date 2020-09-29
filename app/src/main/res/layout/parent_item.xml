@@ -9,23 +9,88 @@
 
     <TextView
         android:id="@+id/parent_item_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12sp"
-        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="20sp"
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
         />
 
-    <LinearLayout
-        android:layout_width="400dp"
+    <Button
+        android:id="@+id/addSets"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="-20dp"
+        android:layout_marginLeft="330dp"
+        android:text="Add Set"
+        android:textSize="15dp" />
+
+
+
+    <TextView
+        android:id="@+id/weightTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="-30dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark"
+        />
+
+
+    <TextView
+        android:id="@+id/timeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-20dp"
+        android:layout_marginLeft="240dp"
+
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark"
+        />
+
+    <TextView
+        android:id="@+id/setsTitle"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="-20dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="25dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/repsTitle"
+        android:layout_width="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="-20dp"
+
+        android:layout_marginLeft="80dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_height="wrap_content"
+        />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
         android:orientation="horizontal">
 
         <!--Child RecyclerView-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 

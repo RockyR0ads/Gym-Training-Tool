@@ -193,7 +193,11 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Paren
         // For the created instance,
         // get the title and set it
         // as the text for the TextView
-        parentViewHolder.ParentItemTitle.setText(exercise.getParentItemTitle());
+        parentViewHolder.ParentItemTitle.setText(exercise.getTitle());
+        parentViewHolder.setsTitle.setText("Sets");
+        parentViewHolder.weightTitle.setText("Weight");
+        parentViewHolder.repsTitle.setText("Reps");
+        parentViewHolder.timeTitle.setText("Time");
 
         // Create a layout manager
         // to assign a layout

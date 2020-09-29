@@ -15,15 +15,16 @@ public class Exercise implements Serializable{
     public Exercise () {
     }
 
-    public Exercise(String title,String weight, String time, int reps) {
+    public Exercise(String title, String weight, String time, int reps) {
         this.title = title;
         this.weight = weight;
         this.time = time;
         this.reps = reps;
+
     }
 
-    public Exercise(String ParentItemTitle,List<ExerciseChild> ChildItemList ) {
-        this.ParentItemTitle = ParentItemTitle;
+    public Exercise(String title,List<ExerciseChild> ChildItemList ) {
+        this.title = title;
         this.ChildItemList = ChildItemList;
     }
 
@@ -60,18 +61,6 @@ public class Exercise implements Serializable{
 
     public void setReps(int reps) { this.reps = reps; }
 
-
-
-    public String getParentItemTitle()
-    {
-        return ParentItemTitle;
-    }
-
-    public void setParentItemTitle(
-            String parentItemTitle)
-    {
-        ParentItemTitle = parentItemTitle;
-    }
 
     public List<ExerciseChild> getChildItemList()
     {

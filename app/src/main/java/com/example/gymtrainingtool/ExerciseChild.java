@@ -4,37 +4,30 @@ import java.io.Serializable;
 public class ExerciseChild implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    private String title,time,weight;
+    private String time,weight;
     private boolean anotherSet;
     private String ChildItemTitle;
-
-    int reps;
+    private int reps;
 
     public ExerciseChild() {
     }
 
-    public ExerciseChild(String title, String weight, String time, int reps) {
-        this.title = title;
+    public ExerciseChild(String weight, String time, int reps) {
         this.weight = weight;
         this.time = time;
         this.reps = reps;
     }
+
     public ExerciseChild(String childItemTitle) {
         this.ChildItemTitle = childItemTitle;
     }
 
-    // Getter and Setter method
-    // for the parameter
     public String getChildItemTitle()
     {
         return ChildItemTitle;
     }
 
-    public void setChildItemTitle(
-            String childItemTitle)
-    {
-        ChildItemTitle = childItemTitle;
-    }
+    public void setChildItemTitle(String childItemTitle) { ChildItemTitle = childItemTitle; }
 
     public boolean isAnotherSet() {
         return anotherSet;
@@ -44,20 +37,8 @@ public class ExerciseChild implements Serializable{
         this.anotherSet = anotherSet;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String name) {
-        this.title = name;
-    }
-
     public String getTime() {
         return time;
-    }
-
-    public void setYear(String year) {
-        this.time = time;
     }
 
     public String getWeight() { return weight; }
