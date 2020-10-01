@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAdapter.ChildViewHolder>{
     private List<ExerciseChild> ChildItemList;
+    private ExerciseAdapter exercise;
+    private List<Exercise> exercisesList;
 
     // Constuctor
    public ExerciseChildAdapter(List<ExerciseChild> childItemList)
@@ -39,6 +41,7 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
     public void onBindViewHolder(@NonNull ChildViewHolder childViewHolder, int position)
     {
 
+
         // Create an instance of the ChildItem
         // class for the given position
         ExerciseChild childItem = ChildItemList.get(position);
@@ -48,8 +51,24 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
         // the ImageViews because we have
         // provided the source for the images
         // in the layout file itself
-        childViewHolder.reps.setText("2");
+        childViewHolder.sets.setText("1");
+        childViewHolder.reps.setText(String.valueOf(childItem.getReps()));
+        childViewHolder.weight.setText(childItem.getWeight());
+        childViewHolder.time.setText(childItem.getTime());
+    }
 
+    public void removeItem(int position) {
+        ChildItemList.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(ExerciseChild exercise, int position) {
+        ChildItemList.add(position, exercise);
+        // notify item added by position
+        notifyItemInserted(position);
     }
 
     @Override
@@ -68,9 +87,8 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
     // This class is to initialize
     // the Views present
     // in the child RecyclerView
-    static class ChildViewHolder extends RecyclerView.ViewHolder {
+   public static class ChildViewHolder extends RecyclerView.ViewHolder {
 
-       // public TextView setsTitle, weightTitle,timeTitle,repsTitle;
         public TextInputEditText sets,time,weight,reps;
         public RelativeLayout viewBackground, viewForeground;
 
@@ -82,10 +100,6 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
             sets = itemView.findViewById(R.id.sets);
             time = itemView.findViewById(R.id.time);
             weight = itemView.findViewById(R.id.weight);
-//            setsTitle = itemView.findViewById(R.id.setsTitle);
-//            weightTitle =itemView.findViewById(R.id.weightTitle);
-//            repsTitle =itemView.findViewById(R.id.repsTitle);
-//            timeTitle = itemView.findViewById(R.id.timeTitle);
             viewForeground = itemView.findViewById(R.id.view_foreground);
             viewBackground = itemView.findViewById(R.id.view_background);
 

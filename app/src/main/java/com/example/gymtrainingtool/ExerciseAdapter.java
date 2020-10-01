@@ -1,12 +1,14 @@
 package com.example.gymtrainingtool;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,7 +43,8 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Paren
         public TextView title, setsTitle, weightTitle,timeTitle,repsTitle, secondSet;
         public TextInputEditText sets,time,weight,reps;
         public Button addSet;
-        public RelativeLayout viewBackground, viewForeground;
+        public RelativeLayout viewBackground;
+        public LinearLayout parentCard,viewForeground;
 
         private TextView ParentItemTitle;
         private RecyclerView ChildRecyclerView;
@@ -59,38 +62,39 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Paren
             timeTitle = view.findViewById(R.id.timeTitle);
             reps = view.findViewById(R.id.reps);
             addSet = view.findViewById(R.id.addSets);
-            viewForeground = view.findViewById(R.id.view_foreground);
+            viewForeground = view.findViewById(R.id.linear_layout);
             viewBackground = view.findViewById(R.id.view_background);
             secondSet = view.findViewById(R.id.set2);
 
             ParentItemTitle = itemView.findViewById(R.id.parent_item_title);
             ChildRecyclerView = itemView.findViewById(R.id.recycler_view);
+            parentCard = itemView.findViewById(R.id.linear_layout);
 
 
-//            viewForeground.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(listener!=null){
-//                        int position = getAdapterPosition();
-//                        if(position!= RecyclerView.NO_POSITION){
-//                            listener.onItemClick(position);
-//                        }
-//                    }
-//                }
-//            });
-//
-//            addSet.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(listener!=null){
-//                        int position = getAdapterPosition();
-//                        if(position!= RecyclerView.NO_POSITION){
-//                            listener.onAddSetClick(position);
-//
-//                        }
-//                    }
-//                }
-//            });
+            parentCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener!=null){
+                        int position = getAdapterPosition();
+                        if(position!= RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
+
+            addSet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener!=null){
+                        int position = getAdapterPosition();
+                        if(position!= RecyclerView.NO_POSITION){
+                            listener.onAddSetClick(position);
+
+                        }
+                    }
+                }
+            });
 
         }
 
@@ -126,18 +130,7 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Paren
     @Override
     public ParentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-//        View view = null;
-//
-//        if(viewType == SET_1){
-//            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row, parent, false);
-//
-//        }else{
-//            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row_add_set, parent, false);
-//        }
-//        return new MyViewHolder(view,mOnItemClickListener);
-
-        // Here we inflate the corresponding
-        // layout of the parent item
+        // Here we inflate the corresponding layout of the parent item
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(
@@ -150,49 +143,9 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Paren
 
     @Override
     public void onBindViewHolder(@NonNull ParentViewHolder parentViewHolder, int position) {
+        // Create an instance of the ParentItem
         Exercise exercise = exercisesList.get(position);
 
-//        switch(viewHolder.getItemViewType()){
-//            case SET_1:
-//                ((ParentViewHolder)viewHolder).title.setText(exercise.getTitle());
-//                ((ParentViewHolder)viewHolder).setsTitle.setText("Sets");
-//                ((ParentViewHolder)viewHolder).repsTitle.setText("Reps");
-//                ((ParentViewHolder)viewHolder).weightTitle.setText("Weight");
-//                ((ParentViewHolder)viewHolder).timeTitle.setText("Seconds");
-//                ((ParentViewHolder)viewHolder).sets.setText("1");
-//
-//                ((ParentViewHolder)viewHolder).title.setText(exercise.getTitle());
-//                ((ParentViewHolder)viewHolder).weight.setText(exercise.getWeight());
-//                ((ParentViewHolder)viewHolder).reps.setText(String.valueOf(exercise.getReps()));
-//                ((ParentViewHolder)viewHolder).time.setText(exercise.getTime());
-//
-//                break;
-//            case SET_1_TO_2:
-//                ((ParentViewHolder)viewHolder).sets.setText("1");
-//                ((ParentViewHolder)viewHolder).secondSet.setText("2");
-//                ((ParentViewHolder)viewHolder).setsTitle.setText("Sets");
-//                ((ParentViewHolder)viewHolder).repsTitle.setText("Reps");
-//                ((ParentViewHolder)viewHolder).weightTitle.setText("Weight");
-//                ((ParentViewHolder)viewHolder).timeTitle.setText("Seconds");
-//
-//                ((ParentViewHolder)viewHolder).title.setText(exercise.getTitle());
-//                ((ParentViewHolder)viewHolder).weight.setText(exercise.getWeight());
-//                ((ParentViewHolder)viewHolder).reps.setText(String.valueOf(exercise.getReps()));
-//                ((ParentViewHolder)viewHolder).time.setText(exercise.getTime());
-//
-//                break;
-//            case SET_1_TO_3:
-//
-//        }
-
-
-        // Create an instance of the ParentItem
-        // class for the given position
-
-
-        // For the created instance,
-        // get the title and set it
-        // as the text for the TextView
         parentViewHolder.ParentItemTitle.setText(exercise.getTitle());
         parentViewHolder.setsTitle.setText("Sets");
         parentViewHolder.weightTitle.setText("Weight");
@@ -222,6 +175,10 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Paren
         parentViewHolder.ChildRecyclerView.setLayoutManager(layoutManager);
         parentViewHolder.ChildRecyclerView.setAdapter(childItemAdapter);
         parentViewHolder.ChildRecyclerView.setRecycledViewPool(viewPool);
+
+
+
+
 
     }
 

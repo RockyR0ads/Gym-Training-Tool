@@ -8,6 +8,7 @@ public class ExerciseChild implements Serializable{
     private boolean anotherSet;
     private String ChildItemTitle;
     private int reps;
+    private Exercise exercise;
 
     public ExerciseChild() {
     }

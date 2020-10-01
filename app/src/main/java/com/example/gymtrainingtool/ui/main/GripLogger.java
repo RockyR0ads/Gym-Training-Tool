@@ -49,22 +49,13 @@ import java.util.List;
 public class GripLogger extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     //private List<Exercise> exercisesList = new ArrayList<>();
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,childRecyclerView;
     private ExerciseAdapter mAdapter;
     private EditText exerciseDialog,sets,time,weight,reps;
     private FrameLayout frameLayout;
     public TextInputEditText tester;
     private RelativeLayout viewForeground;
 
-    public boolean isCheck() {
-        return check;
-    }
-
-    public void setCheck(boolean check) {
-        this.check = check;
-    }
-
-    private boolean check = false;
 
     public GripLogger() {
         // Required empty public constructor
@@ -85,15 +76,9 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // final FrameLayout mRlayout = getView().findViewById(R.id.Frame_layout);
-
-
-//        EditText myEditText = new EditText(getContext());
-//        myEditText.setLayoutParams(new Gallery.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-
-        
 
         recyclerView = getView().findViewById(R.id.parent_recyclerview);
+        childRecyclerView = view.findViewById(R.id.recycler_view);
         frameLayout = getView().findViewById(R.id.Frame_layout);
         mAdapter = new ExerciseAdapter(ParentItemList());
 
@@ -102,23 +87,6 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
-        viewForeground = getView().findViewById(R.id.view_foreground);
-
-
-
-        // Initialise the Linear layout manager
-       // LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-
-        // Pass the arguments
-        // to the parentItemAdapter.
-        // These arguments are passed
-        // using a method ParentItemList()
-       // ParentItemAdapter parentItemAdapter = new ParentItemAdapter(ParentItemList());
-
-        // Set the layout manager
-        // and adapter for items
-        // of the parent recyclerview
-
 
 
 
@@ -136,6 +104,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
             @Override
             public void onAddSetClick(int position) {
                 Exercise exercise =  mAdapter.getExercisesList().get(position);
+
                 exercise.setAnotherSet(true);
                 mAdapter.notifyItemChanged(position);
 
@@ -143,7 +112,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         });
 
       // prepareExerciseData();
-        Button addSet = view.findViewById(R.id.addSets);
+
         FloatingActionButton fab = getView().findViewById(R.id.fab);
 
 
@@ -157,40 +126,14 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
             }
         });
 
-//        ItemClickSupport.addTo(recyclerView)
-//                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-//                        // do it
-//                        Toast.makeText(getActivity().getApplicationContext(), "my anus hurts", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
-//        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-//            @Override
-//            public void onClick(View view, int position) {
-//                Exercise exercise = mAdapter.getExercisesList().get(position);
-//                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
-//
-//            }
-
-//            @Override
-//            public void onLongClick(View view, int position) {
-//                exercisesList = mAdapter.getExercisesList();
-//                exercisesList.remove(position);
-//                mAdapter.setExercisesList(exercisesList);
-//                writeList(getContext(),mAdapter.getExercisesList());
-//                mAdapter.notifyDataSetChanged();
-//
-//            }
-//        }));
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,this );
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
 
-
     }
+
+
 
     private List<Exercise> ParentItemList()
     {
@@ -200,13 +143,6 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         itemList.add(item);
         Exercise item1 = new Exercise("Double Overhand Barbell Hold", ChildItemList());
         itemList.add(item1);
-//        Exercise item2 = new Exercise("Title 3", ChildItemList());
-//        itemList.add(item2);
-//        Exercise item3 = new Exercise("Title 4", ChildItemList());
-//        itemList.add(item3);
-
-
-
 
        return itemList;
     }
@@ -214,6 +150,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     private List<ExerciseChild> ChildItemList()
     {
         List<ExerciseChild> ChildItemList = new ArrayList<>();
+
 
         ChildItemList.add(new ExerciseChild("60kg", "15",1));
         ChildItemList.add(new ExerciseChild("100kg","20",1));
@@ -312,6 +249,9 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
             ex.printStackTrace();
         }
     }
+
+
+
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
