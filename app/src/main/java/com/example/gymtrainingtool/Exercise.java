@@ -10,6 +10,9 @@ public class Exercise implements Serializable{
     private String ParentItemTitle;
     private List<ExerciseChild> ChildItemList;
 
+
+    private int position;
+
     int reps;
 
     public Exercise () {
@@ -60,6 +63,15 @@ public class Exercise implements Serializable{
     public int getReps() { return reps; }
 
     public void setReps(int reps) { this.reps = reps; }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
 
 
     public List<ExerciseChild> getChildItemList()

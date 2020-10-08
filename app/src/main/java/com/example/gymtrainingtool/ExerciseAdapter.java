@@ -4,28 +4,79 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
-public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ParentViewHolder>{
+import static java.security.AccessController.getContext;
+
+public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ParentViewHolder> implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
     private onItemClickListener mOnItemClickListener;
     private List<Exercise> exercisesList;
-
+    RecyclerView mRecyclerView;
     // An object of RecyclerView.RecycledViewPool
     // is created to share the Views
     // between the child and
     // the parent RecyclerViews
     private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
-    //private List<Exercise> itemList;
+
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+
+        if (viewHolder instanceof ExerciseChildAdapter.ChildViewHolder) {
+
+            Exercise exercise = exercisesList.get(position);
+
+
+            // get the removed item name to display it in snack bar
+             String name = exercisesList.get(viewHolder.getAdapterPosition()).getTitle();
+            String title = exercise.getTitle();
+            // backup of removed item for undo purpose
+            //  final Exercise deletedItem = exercisesList.get(viewHolder.getAdapterPosition());
+            final Exercise deletedItem = exercise;
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            removeItem(viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(((ExerciseChildAdapter.ChildViewHolder) viewHolder).fL, title + " removed from cart!", Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    boolean  deleteItem = false;
+                    // undo is selected, restore the deleted item
+                    restoreItem(deletedItem, deletedIndex);
+                }
+            });
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();
+
+            // exercisesList = mAdapter.getExercisesList();
+            // exercisesList.remove(position);
+            // mAdapter.setExercisesList(exercisesList);
+           // writeList(getContext(),mAdapter.getExercisesList());
+            notifyItemRemoved(position);
+
+        }
+
+    }
 
 
 
@@ -45,6 +96,7 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Paren
         public Button addSet;
         public RelativeLayout viewBackground;
         public LinearLayout parentCard,viewForeground;
+
 
         private TextView ParentItemTitle;
         private RecyclerView ChildRecyclerView;
@@ -66,10 +118,11 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Paren
             viewBackground = view.findViewById(R.id.view_background);
             secondSet = view.findViewById(R.id.set2);
 
+
             ParentItemTitle = itemView.findViewById(R.id.parent_item_title);
             ChildRecyclerView = itemView.findViewById(R.id.recycler_view);
             parentCard = itemView.findViewById(R.id.linear_layout);
-
+           // frameLayout = itemView.findViewById(R.id.Frame_layout);
 
             parentCard.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -131,21 +184,17 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Paren
     public ParentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         // Here we inflate the corresponding layout of the parent item
-        View view = LayoutInflater
-                .from(parent.getContext())
-                .inflate(
-                        R.layout.parent_item,
-                        parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.parent_item, parent, false);
 
         return new ParentViewHolder(view,mOnItemClickListener);
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ParentViewHolder parentViewHolder, int position) {
+    public void onBindViewHolder(@NonNull final ParentViewHolder parentViewHolder, final int position) {
         // Create an instance of the ParentItem
-        Exercise exercise = exercisesList.get(position);
-
+        final Exercise exercise = exercisesList.get(position);
+        exercise.setPosition(position);
         parentViewHolder.ParentItemTitle.setText(exercise.getTitle());
         parentViewHolder.setsTitle.setText("Sets");
         parentViewHolder.weightTitle.setText("Weight");
@@ -171,16 +220,33 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Paren
         // Create an instance of the child
         // item view adapter and set its
         // adapter, layout manager and RecyclerViewPool
-        ExerciseChildAdapter childItemAdapter = new ExerciseChildAdapter(exercise.getChildItemList());
+        final ExerciseChildAdapter childItemAdapter = new ExerciseChildAdapter(exercise.getChildItemList());
         parentViewHolder.ChildRecyclerView.setLayoutManager(layoutManager);
         parentViewHolder.ChildRecyclerView.setAdapter(childItemAdapter);
         parentViewHolder.ChildRecyclerView.setRecycledViewPool(viewPool);
 
 
+        childItemAdapter.setOnItemClickListener(new ExerciseChildAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
 
+                Toast.makeText(parentViewHolder.ChildRecyclerView.getContext().getApplicationContext(), exercise.getChildItemList().get(position).getWeight() + " is selected", Toast.LENGTH_SHORT).show();
+            }
+        });
 
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,this );
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(parentViewHolder.ChildRecyclerView);
 
     }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+
+        mRecyclerView = recyclerView;
+    }
+
+
 
     private static final int SET_1 = 0;
     private static final int SET_1_TO_2 = 1;
@@ -198,7 +264,9 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Paren
     }
 
     public void removeItem(int position) {
-        exercisesList.remove(position);
+        Exercise exercise = exercisesList.get(position);
+        exercise.getChildItemList().remove(position);
+       // exercisesList.remove(position);
         // notify the item removed by position
         // to perform recycler view delete animations
         // NOTE: don't call notifyDataSetChanged()

@@ -82,6 +82,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         frameLayout = getView().findViewById(R.id.Frame_layout);
         mAdapter = new ExerciseAdapter(ParentItemList());
 
+
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -105,8 +106,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
             public void onAddSetClick(int position) {
                 Exercise exercise =  mAdapter.getExercisesList().get(position);
 
-                exercise.setAnotherSet(true);
-                mAdapter.notifyItemChanged(position);
+                Toast.makeText(getActivity().getApplicationContext(), "add set is selected for " + exercise.getTitle(), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -127,9 +127,8 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         });
 
 
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,this );
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
-
+//        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,this );
+//        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
     }
 
@@ -152,11 +151,14 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         List<ExerciseChild> ChildItemList = new ArrayList<>();
 
 
-        ChildItemList.add(new ExerciseChild("60kg", "15",1));
-        ChildItemList.add(new ExerciseChild("100kg","20",1));
+            ChildItemList.add(new ExerciseChild("60kg", "15", 1));
+            ChildItemList.add(new ExerciseChild("100kg", "20", 1));
+
 
         return ChildItemList;
     }
+
+
 
     private void prepareExerciseData() {
         Exercise exercise = new Exercise("Single Hand Barbell Hold","60kg", "15",1);
@@ -256,7 +258,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
 
-        if (viewHolder instanceof ExerciseAdapter.ParentViewHolder) {
+        if (viewHolder instanceof ExerciseChildAdapter.ChildViewHolder) {
 
             Exercise exercise = mAdapter.getExercisesList().get(position);
 

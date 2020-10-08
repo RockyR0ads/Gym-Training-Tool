@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,7 +19,17 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
     private List<ExerciseChild> ChildItemList;
     private ExerciseAdapter exercise;
     private List<Exercise> exercisesList;
+    private onItemClickListener mOnItemClickListener;
+    private Exercise ex;
 
+    public interface onItemClickListener{
+        void onItemClick(int position);
+
+    }
+
+    public void setOnItemClickListener(onItemClickListener listener){
+        mOnItemClickListener = listener;
+    }
     // Constuctor
    public ExerciseChildAdapter(List<ExerciseChild> childItemList)
     {
@@ -34,7 +45,7 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
         // layout of the child item
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.exercise_list_row, viewGroup, false);
 
-        return new ChildViewHolder(view);
+        return new ChildViewHolder(view,mOnItemClickListener);
     }
 
     @Override
@@ -90,9 +101,10 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
    public static class ChildViewHolder extends RecyclerView.ViewHolder {
 
         public TextInputEditText sets,time,weight,reps;
-        public RelativeLayout viewBackground, viewForeground;
+        public RelativeLayout viewBackground, viewForeground,ChildRecyclerView;
+        public FrameLayout fL;
 
-        ChildViewHolder(View itemView)
+        ChildViewHolder(View itemView,final onItemClickListener listener)
         {
             super(itemView);
 
@@ -102,7 +114,19 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
             weight = itemView.findViewById(R.id.weight);
             viewForeground = itemView.findViewById(R.id.view_foreground);
             viewBackground = itemView.findViewById(R.id.view_background);
+            fL = itemView.findViewById(R.id.Frame_layout);
 
+            viewForeground.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener!=null){
+                        int position = getAdapterPosition();
+                        if(position!= RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
