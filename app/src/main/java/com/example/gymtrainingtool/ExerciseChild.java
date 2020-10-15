@@ -6,38 +6,30 @@ public class ExerciseChild implements Serializable{
     private static final long serialVersionUID = 1L;
     private String time,weight;
     private boolean anotherSet;
-    private String ChildItemTitle;
     private int reps;
-
-    public Exercise getExercise() {
-        return exercise;
-    }
-
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
-    }
-
+    private int parentPosition;
     private Exercise exercise;
+    private int set;
+    private String parentTitle;
 
     public ExerciseChild() {
     }
 
-    public ExerciseChild(String weight, String time, int reps) {
+    public ExerciseChild(int set, String weight, String time, int reps) {
         this.weight = weight;
         this.time = time;
         this.reps = reps;
+        this.set = set;
+
     }
 
-    public ExerciseChild(String childItemTitle) {
-        this.ChildItemTitle = childItemTitle;
-    }
+    public void setParentTitle(String parentTitle) { this.parentTitle = parentTitle; }
 
-    public String getChildItemTitle()
-    {
-        return ChildItemTitle;
-    }
+    public String getParentTitle() { return parentTitle; }
 
-    public void setChildItemTitle(String childItemTitle) { ChildItemTitle = childItemTitle; }
+    public int getSet() { return set; }
+
+    public void setSet(int set) { this.set = set; }
 
     public boolean isAnotherSet() {
         return anotherSet;
@@ -58,4 +50,20 @@ public class ExerciseChild implements Serializable{
     public int getReps() { return reps; }
 
     public void setReps(int reps) { this.reps = reps; }
+
+    public int getParentPosition() {
+        return parentPosition;
+    }
+
+    public void setParentPosition(int parentPosition) {
+        this.parentPosition = parentPosition;
+    }
+
+    public Exercise getExercise() {
+        return exercise;
+    }
+
+    public void setExercise(Exercise exercise) {
+        this.exercise = exercise;
+    }
 }

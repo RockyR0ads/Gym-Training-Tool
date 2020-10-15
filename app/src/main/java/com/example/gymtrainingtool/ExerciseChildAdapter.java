@@ -13,14 +13,26 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAdapter.ChildViewHolder>{
     private List<ExerciseChild> ChildItemList;
-    private ExerciseAdapter exercise;
+    private int sets = 1;
+
+    public Exercise getExercise() {
+        return exercise;
+    }
+
+    public void setExercise(Exercise exercise) {
+        this.exercise = exercise;
+    }
+
+    //private ExerciseAdapter exercise;
+    private Exercise exercise;
     private List<Exercise> exercisesList;
     private onItemClickListener mOnItemClickListener;
-    private Exercise ex;
+    private int pPos = 0;
 
     public interface onItemClickListener{
         void onItemClick(int position);
@@ -31,10 +43,13 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
         mOnItemClickListener = listener;
     }
     // Constuctor
-   public ExerciseChildAdapter(List<ExerciseChild> childItemList)
+   public ExerciseChildAdapter(List<ExerciseChild> childItemList,Exercise exercise)
     {
         this.ChildItemList = childItemList;
+        this.exercise = exercise;
     }
+
+
 
     @NonNull
     @Override
@@ -62,14 +77,19 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
         // the ImageViews because we have
         // provided the source for the images
         // in the layout file itself
-        childViewHolder.sets.setText("1");
+        childViewHolder.sets.setText(String.valueOf(childItem.getSet()));
         childViewHolder.reps.setText(String.valueOf(childItem.getReps()));
         childViewHolder.weight.setText(childItem.getWeight());
         childViewHolder.time.setText(childItem.getTime());
+
+
     }
 
+
     public void removeItem(int position) {
-        ChildItemList.remove(position);
+
+        exercise.getChildItemList().remove(position);
+       // ChildItemList.remove(position);
         // notify the item removed by position
         // to perform recycler view delete animations
         // NOTE: don't call notifyDataSetChanged()
@@ -81,6 +101,9 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
         // notify item added by position
         notifyItemInserted(position);
     }
+
+
+
 
     @Override
     public int getItemCount()
@@ -101,8 +124,10 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
    public static class ChildViewHolder extends RecyclerView.ViewHolder {
 
         public TextInputEditText sets,time,weight,reps;
-        public RelativeLayout viewBackground, viewForeground,ChildRecyclerView;
+        public RelativeLayout viewBackground, viewForeground;
         public FrameLayout fL;
+        public RecyclerView ChildRecyclerView;
+
 
         ChildViewHolder(View itemView,final onItemClickListener listener)
         {
@@ -116,6 +141,7 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
             viewBackground = itemView.findViewById(R.id.view_background);
             fL = itemView.findViewById(R.id.Frame_layout);
 
+
             viewForeground.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -127,7 +153,10 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
                     }
                 }
             });
+
         }
+
+
     }
 
 }

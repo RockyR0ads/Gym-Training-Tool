@@ -42,6 +42,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,7 +98,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
             //on TAP of every element
             public void onItemClick(int position) {
                 Exercise exercise = mAdapter.getExercisesList().get(position);
-                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " is selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), exercise.getPosition() + " is selected", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -143,20 +144,33 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         Exercise item1 = new Exercise("Double Overhand Barbell Hold", ChildItemList());
         itemList.add(item1);
 
+
        return itemList;
     }
 
     private List<ExerciseChild> ChildItemList()
     {
+
         List<ExerciseChild> ChildItemList = new ArrayList<>();
 
 
-            ChildItemList.add(new ExerciseChild("60kg", "15", 1));
-            ChildItemList.add(new ExerciseChild("100kg", "20", 1));
+            ChildItemList.add(new ExerciseChild(1,"60kg", "15", 1));
+
+            ChildItemList.add(new ExerciseChild(2,"100kg", "20", 1));
 
 
         return ChildItemList;
     }
+
+    private void storeExerciseTitle(List<ExerciseChild> ec, Exercise e)
+    {
+
+        ec.get(0).setParentTitle(e.getTitle());
+        ec.get(1).setParentTitle(e.getTitle());
+
+    }
+
+
 
 
 
@@ -263,36 +277,36 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
             Exercise exercise = mAdapter.getExercisesList().get(position);
 
 
-            // get the removed item name to display it in snack bar
-           // String name = exercisesList.get(viewHolder.getAdapterPosition()).getTitle();
-            String title = exercise.getTitle();
-            // backup of removed item for undo purpose
-          //  final Exercise deletedItem = exercisesList.get(viewHolder.getAdapterPosition());
-            final Exercise deletedItem = exercise;
-            final int deletedIndex = viewHolder.getAdapterPosition();
-
-            // remove the item from recycler view
-            mAdapter.removeItem(viewHolder.getAdapterPosition());
-
-            // showing snack bar with Undo option
-            Snackbar snackbar = Snackbar
-                    .make(frameLayout, title + " removed from cart!", Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                  boolean  deleteItem = false;
-                    // undo is selected, restore the deleted item
-                    mAdapter.restoreItem(deletedItem, deletedIndex);
-                }
-            });
-            snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();
-
-           // exercisesList = mAdapter.getExercisesList();
-           // exercisesList.remove(position);
-           // mAdapter.setExercisesList(exercisesList);
-            writeList(getContext(),mAdapter.getExercisesList());
-            mAdapter.notifyItemRemoved(position);
+//            // get the removed item name to display it in snack bar
+//            String name = exercisesList.get(viewHolder.getAdapterPosition()).getTitle();
+//            String title = exercise.getTitle();
+//            // backup of removed item for undo purpose
+//            final Exercise deletedItem = exercisesList.get(viewHolder.getAdapterPosition());
+//            final Exercise deletedItem = exercise;
+//            final int deletedIndex = viewHolder.getAdapterPosition();
+//
+//            // remove the item from recycler view
+//            mAdapter.removeItem(viewHolder.getAdapterPosition());
+//
+//            // showing snack bar with Undo option
+//            Snackbar snackbar = Snackbar
+//                    .make(frameLayout, title + " removed from cart!", Snackbar.LENGTH_LONG);
+//            snackbar.setAction("UNDO", new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                  boolean  deleteItem = false;
+//                    // undo is selected, restore the deleted item
+//                    mAdapter.restoreItem(deletedItem, deletedIndex);
+//                }
+//            });
+//            snackbar.setActionTextColor(Color.YELLOW);
+//            snackbar.show();
+//
+//           // exercisesList = mAdapter.getExercisesList();
+//           // exercisesList.remove(position);
+//           // mAdapter.setExercisesList(exercisesList);
+//            writeList(getContext(),mAdapter.getExercisesList());
+//            mAdapter.notifyItemRemoved(position);
 
         }
     }
