@@ -42,6 +42,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -53,9 +54,8 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
     private RecyclerView recyclerView,childRecyclerView;
     private ExerciseAdapter mAdapter;
     private EditText exerciseDialog,sets,time,weight,reps;
-    private FrameLayout frameLayout;
-    public TextInputEditText tester;
-    private RelativeLayout viewForeground;
+
+
 
 
     public GripLogger() {
@@ -80,7 +80,6 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
         recyclerView = getView().findViewById(R.id.parent_recyclerview);
         childRecyclerView = view.findViewById(R.id.recycler_view);
-        frameLayout = getView().findViewById(R.id.Frame_layout);
         mAdapter = new ExerciseAdapter(ParentItemList());
 
 
@@ -91,32 +90,27 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         recyclerView.setAdapter(mAdapter);
 
 
-
-
         mAdapter.setOnItemClickListener(new ExerciseAdapter.onItemClickListener() {
             @Override
-            //on TAP of every element
+            //on TAP of every PARENT element
             public void onItemClick(int position) {
                 Exercise exercise = mAdapter.getExercisesList().get(position);
-                Toast.makeText(getActivity().getApplicationContext(), exercise.getPosition() + " is selected", Toast.LENGTH_SHORT).show();
-
-
+                Toast.makeText(getActivity().getApplicationContext(), exercise.getTitle() + " is selected", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onAddSetClick(int position) {
                 Exercise exercise =  mAdapter.getExercisesList().get(position);
-
-                Toast.makeText(getActivity().getApplicationContext(), "add set is selected for " + exercise.getTitle(), Toast.LENGTH_SHORT).show();
-
+                int sets = exercise.getChildItemList().size();
+                Toast.makeText(getActivity().getApplicationContext(), "added another set!", Toast.LENGTH_SHORT).show();
+                exercise.getChildItemList().add(new ExerciseChild(++sets));
+                mAdapter.notifyDataSetChanged();
             }
         });
 
       // prepareExerciseData();
 
         FloatingActionButton fab = getView().findViewById(R.id.fab);
-
-
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,17 +155,6 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
         return ChildItemList;
     }
-
-    private void storeExerciseTitle(List<ExerciseChild> ec, Exercise e)
-    {
-
-        ec.get(0).setParentTitle(e.getTitle());
-        ec.get(1).setParentTitle(e.getTitle());
-
-    }
-
-
-
 
 
     private void prepareExerciseData() {
@@ -277,7 +260,7 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
             Exercise exercise = mAdapter.getExercisesList().get(position);
 
 
-//            // get the removed item name to display it in snack bar
+            // get the removed item name to display it in snack bar
 //            String name = exercisesList.get(viewHolder.getAdapterPosition()).getTitle();
 //            String title = exercise.getTitle();
 //            // backup of removed item for undo purpose

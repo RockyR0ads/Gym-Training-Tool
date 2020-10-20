@@ -1,7 +1,9 @@
 package com.example.gymtrainingtool.ui.main;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -20,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.gymtrainingtool.MainActivity;
 import com.example.gymtrainingtool.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -44,6 +45,7 @@ public class Calculator extends Fragment {
     double convertedWeight = 0;
     double ormWeight = 0;
     double oneRepMax = 0;
+    double RPEresult = 0;
 
     int repetitions = 0;
     int intPart = 0;
@@ -57,12 +59,12 @@ public class Calculator extends Fragment {
 
     TextView result, LBresult, timer;
     ImageView image;
-    TextInputLayout poundWeight, weight, weight2, reps, Percentage, calorieInput;
-
+    TextInputLayout poundWeight, weight, weight2, reps, Percentage, calorieInput,weight3,rpeBox;
+    EditText RPEdialog;
     Switch xmlSwitch;
     Switch ccSwitch;
 
-    Button start, pause, reset, submitButton, submit1, submit2, submitCC;
+    Button start, pause, reset, submitButton, submit1, submit2, submitCC, submitRPE;
     Handler handler;
     long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L ;
     int Seconds, Minutes, MilliSeconds ;
@@ -110,6 +112,9 @@ public class Calculator extends Fragment {
         reset = getView().findViewById(R.id.btReset);
         submitCC = getView().findViewById(R.id.submitCC);
         calorieInput = getView().findViewById(R.id.calorieInput);
+        weight3 = getView().findViewById(R.id.RPEreps);
+        rpeBox = getView().findViewById(R.id.RPE);
+        submitRPE = getView().findViewById(R.id.submitRPE);
 
         handler = new Handler() ;
 
@@ -121,7 +126,131 @@ public class Calculator extends Fragment {
         percentageCalculator();
         mediaPlayer();
         stopwatchHandler();
+
+
+        submitRPE.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                //close keyboard when button is pressed
+                if (v != null) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+
+                calcRPEWeight();
+
+            }
+        });
+
     }
+
+    private void buildDialog(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View mView = inflater.inflate(R.layout.dialog_rpe_alert, null);
+
+        RPEdialog = mView.findViewById(R.id.rpeDialog);
+
+        builder.setView(mView);
+        builder.setMessage("1RM is required!");
+        builder.setIcon(getResources().getDrawable(android.R.drawable.ic_dialog_alert))
+
+                .setPositiveButton("Calculate", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // do what when you click add
+                       oneRepMax =  Double.parseDouble(RPEdialog.getText().toString());
+                       calcRPEWeight();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                        dialog.cancel();
+
+                    }
+                });
+
+        // Create the AlertDialog object and return it
+        AlertDialog builder1 = builder.create();
+        builder1.show();
+
+    }
+
+    private void calcRPEWeight() {
+        //grab entered values
+        double rpe = Double.parseDouble(rpeBox.getEditText().getText().toString());
+        int reps = Integer.parseInt(weight3.getEditText().getText().toString());
+
+        if (oneRepMax != 0) {
+
+            double check = calculateRPEWeight(rpe, reps);
+            RPEresult = oneRepMax / 100 * check;
+            RPEresult = Math.round(RPEresult * 10.0) / 10.0;
+            result.setText(df.format(RPEresult) + "Kg" + "\n");
+
+            //pound conversion
+            convertedWeight = RPEresult * 2.20462;
+            LBresult.setText((df.format((int) convertedWeight)) + "Lb" + "\n");
+            LBresult.setTextSize(70);
+            image.setVisibility(View.VISIBLE);
+        } else {
+            buildDialog();
+        }
+
+    }
+
+
+
+    private double calculateRPEWeight(double rpe,int reps){
+        // Cap the RPE at 10.
+        if (rpe > 10) {
+            rpe = 10.0;
+        }
+
+        // No prediction if failure occurred, or if RPE is unreasonably low.
+        if (reps < 1 || rpe < 6) {
+            return 0.0;
+        }
+
+        // Handle the obvious case early to avoid boundary errors.
+        if (reps == 1 && rpe == 10.0) {
+            return 100.0;
+        }
+
+        // x is defined such that 1@10 = 0, 1@9 = 1, 1@8 = 2, etc.
+        // By definition of RPE, then also:
+        //  2@10 = 1@9 = 1
+        //  3@10 = 2@9 = 1@8 = 2
+        // And so on. That pattern gives the equation below.
+        double x = (10.0 - rpe) + (reps - 1);
+
+        // The logic breaks down for super-high numbers,
+        // and it's too hard to extrapolate an E1RM from super-high-rep sets anyway.
+        if (x >= 16) {
+            return 0.0;
+        }
+
+        double intersection = 2.92;
+
+        // The highest values follow a quadratic.
+        // Parameters were resolved via GNUPlot and match extremely closely.
+        if (x <= intersection) {
+            double a = 0.347619;
+            double b = -4.60714;
+            double c = 99.9667;
+            return a*x*x + b*x + c;
+        }
+
+        // Otherwise it's just a line, since Tuchscherer just guessed.
+        double m = -2.64249;
+        double b = 97.0955;
+        return m*x + b;
+    }
+
+
 
     private void calculateORM() {
         submit2.setOnClickListener(new View.OnClickListener()
