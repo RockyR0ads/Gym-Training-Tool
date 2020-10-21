@@ -52,11 +52,11 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Parent
 
     public static class ParentViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView title, setsTitle, weightTitle, timeTitle, repsTitle, secondSet;
+        public TextView title, setsTitle, weightTitle, timeTitle, repsTitle, RPEtitle;
         public TextInputEditText sets, time, weight, reps;
         public Button addSet;
-        public RelativeLayout viewBackground;
-        public LinearLayout parentCard, viewForeground;
+        public RelativeLayout viewBackground,viewForeground;
+        public FrameLayout parentCard;
 
 
         private TextView ParentItemTitle;
@@ -75,9 +75,10 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Parent
             timeTitle = view.findViewById(R.id.timeTitle);
             reps = view.findViewById(R.id.reps);
             addSet = view.findViewById(R.id.addSets);
-            viewForeground = view.findViewById(R.id.linear_layout);
+            RPEtitle = view.findViewById(R.id.RPETitle);
+            viewForeground = view.findViewById(R.id.view_foreground);
             viewBackground = view.findViewById(R.id.view_background);
-            secondSet = view.findViewById(R.id.set2);
+
             ParentItemTitle = itemView.findViewById(R.id.parent_item_title);
             ChildRecyclerView = itemView.findViewById(R.id.recycler_view);
             parentCard = itemView.findViewById(R.id.linear_layout);
@@ -153,6 +154,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Parent
         parentViewHolder.weightTitle.setText("Weight");
         parentViewHolder.repsTitle.setText("Reps");
         parentViewHolder.timeTitle.setText("Time");
+        parentViewHolder.RPEtitle.setText("RPE");
 
 
         // Create a layout manager to assign a layout to the RecyclerView. Here we have assigned the layout as LinearLayout with vertical orientation

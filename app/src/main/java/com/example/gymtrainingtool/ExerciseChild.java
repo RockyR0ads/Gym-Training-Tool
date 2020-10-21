@@ -5,17 +5,19 @@ public class ExerciseChild implements Serializable{
 
     private static final long serialVersionUID = 1L;
     private String time,weight,parentTitle;
-    private int reps,set;
+    private int reps,rpe,set;
+
 
     //constructors
     public ExerciseChild() {
     }
 
-    public ExerciseChild(int set, String weight, String time, int reps) {
+    public ExerciseChild(int set, String weight, String time, int reps,int rpe) {
         this.weight = weight;
         this.time = time;
         this.reps = reps;
         this.set = set;
+        this.rpe = rpe;
 
     }
     public ExerciseChild(int set) {
@@ -42,5 +44,9 @@ public class ExerciseChild implements Serializable{
     public int getReps() { return reps; }
 
     public void setReps(int reps) { this.reps = reps; }
+
+    public int getRpe() { return rpe; }
+
+    public void setRpe(int rpe) { this.rpe = rpe; }
 
 }

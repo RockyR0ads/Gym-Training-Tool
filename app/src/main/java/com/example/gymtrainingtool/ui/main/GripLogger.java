@@ -148,9 +148,9 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
         List<ExerciseChild> ChildItemList = new ArrayList<>();
 
 
-            ChildItemList.add(new ExerciseChild(1,"60kg", "15", 1));
+            ChildItemList.add(new ExerciseChild(1,"60kg", "15", 1,10));
 
-            ChildItemList.add(new ExerciseChild(2,"100kg", "20", 1));
+            ChildItemList.add(new ExerciseChild(2,"100kg", "20", 1,10));
 
 
         return ChildItemList;

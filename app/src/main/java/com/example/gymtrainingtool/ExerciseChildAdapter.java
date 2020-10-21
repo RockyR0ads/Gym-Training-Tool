@@ -60,6 +60,7 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
         childViewHolder.reps.setText(String.valueOf(childItem.getReps()));
         childViewHolder.weight.setText(childItem.getWeight());
         childViewHolder.time.setText(childItem.getTime());
+        childViewHolder.rpe.setText(String.valueOf(childItem.getRpe()));
 
     }
 
@@ -88,7 +89,7 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
     // This class is to initialize the Views present in the child RecyclerView
    public static class ChildViewHolder extends RecyclerView.ViewHolder {
 
-        public TextInputEditText sets,time,weight,reps;
+        public TextInputEditText sets,time,weight,reps,rpe;
         public RelativeLayout viewBackground, viewForeground;
         public FrameLayout fL;
 
@@ -102,6 +103,7 @@ public  class ExerciseChildAdapter extends RecyclerView.Adapter<ExerciseChildAda
             sets = itemView.findViewById(R.id.sets);
             time = itemView.findViewById(R.id.time);
             weight = itemView.findViewById(R.id.weight);
+            rpe = itemView.findViewById(R.id.RPEInput);
             viewForeground = itemView.findViewById(R.id.view_foreground);
             viewBackground = itemView.findViewById(R.id.view_background);
             fL = itemView.findViewById(R.id.Frame_layout);
