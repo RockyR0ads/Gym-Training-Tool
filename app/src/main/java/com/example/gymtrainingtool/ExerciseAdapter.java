@@ -1,64 +1,94 @@
 package com.example.gymtrainingtool;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.ClipData;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
-public  class ExerciseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+import static java.security.AccessController.getContext;
+
+public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ParentViewHolder> implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     private onItemClickListener mOnItemClickListener;
     private List<Exercise> exercisesList;
 
 
-    public interface onItemClickListener{
+    // An object of RecyclerView.RecycledViewPoo is created to share the Views between the child and the parent RecyclerViews
+    private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
+
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        //stub
+
+    }
+
+    public interface onItemClickListener {
         void onItemClick(int position);
+
         void onAddSetClick(int position);
     }
 
-    public void setOnItemClickListener(onItemClickListener listener){
+    public void setOnItemClickListener(onItemClickListener listener) {
         mOnItemClickListener = listener;
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class ParentViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView title, setsTitle, weightTitle,timeTitle,repsTitle, secondSet;
-        public TextInputEditText sets,time,weight,reps;
+        public TextView title, setsTitle, weightTitle, timeTitle, repsTitle, secondSet;
+        public TextInputEditText sets, time, weight, reps;
         public Button addSet;
-        public RelativeLayout viewBackground, viewForeground;
+        public RelativeLayout viewBackground;
+        public LinearLayout parentCard, viewForeground;
 
 
+        private TextView ParentItemTitle;
+        private RecyclerView ChildRecyclerView;
 
-        public MyViewHolder(View view, final onItemClickListener listener) {
+
+        public ParentViewHolder(View view, final onItemClickListener listener) {
             super(view);
             title = view.findViewById(R.id.title);
             sets = view.findViewById(R.id.sets);
             time = view.findViewById(R.id.time);
             setsTitle = view.findViewById(R.id.setsTitle);
-            weightTitle =view.findViewById(R.id.weightTitle);
-            repsTitle =view.findViewById(R.id.repsTitle);
+            weightTitle = view.findViewById(R.id.weightTitle);
+            repsTitle = view.findViewById(R.id.repsTitle);
             weight = view.findViewById(R.id.weight);
             timeTitle = view.findViewById(R.id.timeTitle);
             reps = view.findViewById(R.id.reps);
             addSet = view.findViewById(R.id.addSets);
-            viewForeground = view.findViewById(R.id.view_foreground);
+            viewForeground = view.findViewById(R.id.linear_layout);
             viewBackground = view.findViewById(R.id.view_background);
             secondSet = view.findViewById(R.id.set2);
+            ParentItemTitle = itemView.findViewById(R.id.parent_item_title);
+            ChildRecyclerView = itemView.findViewById(R.id.recycler_view);
+            parentCard = itemView.findViewById(R.id.linear_layout);
 
 
-            viewForeground.setOnClickListener(new View.OnClickListener() {
+            parentCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(listener!=null){
+                    if (listener != null) {
                         int position = getAdapterPosition();
-                        if(position!= RecyclerView.NO_POSITION){
+                        if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
                         }
                     }
@@ -68,9 +98,9 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             addSet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(listener!=null){
+                    if (listener != null) {
                         int position = getAdapterPosition();
-                        if(position!= RecyclerView.NO_POSITION){
+                        if (position != RecyclerView.NO_POSITION) {
                             listener.onAddSetClick(position);
 
                         }
@@ -79,12 +109,6 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             });
 
         }
-
-
-//        @Override
-//        public void onClick(View v) {
-//            oic.onImageClick(getAdapterPosition());
-//        }
 
     }
 
@@ -107,59 +131,85 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
 
-
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ParentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = null;
+        // Here we inflate the corresponding layout of the parent item
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.parent_item, parent, false);
 
-        if(viewType == SET_1){
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row, parent, false);
-
-        }else{
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_list_row_add_set, parent, false);
-        }
-        return new MyViewHolder(view,mOnItemClickListener);
+        return new ParentViewHolder(view, mOnItemClickListener);
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        Exercise exercise = exercisesList.get(position);
+    public void onBindViewHolder(@NonNull final ParentViewHolder parentViewHolder, final int position) {
 
-        switch(viewHolder.getItemViewType()){
-            case SET_1:
-                ((MyViewHolder)viewHolder).title.setText(exercise.getTitle());
-                ((MyViewHolder)viewHolder).setsTitle.setText("Sets");
-                ((MyViewHolder)viewHolder).repsTitle.setText("Reps");
-                ((MyViewHolder)viewHolder).weightTitle.setText("Weight");
-                ((MyViewHolder)viewHolder).timeTitle.setText("Seconds");
-                ((MyViewHolder)viewHolder).sets.setText("1");
+        // Create an instance of the ParentItem
+        final Exercise exercise = exercisesList.get(position);
 
-                ((MyViewHolder)viewHolder).title.setText(exercise.getTitle());
-                ((MyViewHolder)viewHolder).weight.setText(exercise.getWeight());
-                ((MyViewHolder)viewHolder).reps.setText(String.valueOf(exercise.getReps()));
-                ((MyViewHolder)viewHolder).time.setText(exercise.getTime());
+        parentViewHolder.ParentItemTitle.setText(exercise.getTitle());
+        parentViewHolder.setsTitle.setText("Sets");
+        parentViewHolder.weightTitle.setText("Weight");
+        parentViewHolder.repsTitle.setText("Reps");
+        parentViewHolder.timeTitle.setText("Time");
 
-                break;
-            case SET_1_TO_2:
-                ((MyViewHolder)viewHolder).sets.setText("1");
-                ((MyViewHolder)viewHolder).secondSet.setText("2");
-                ((MyViewHolder)viewHolder).setsTitle.setText("Sets");
-                ((MyViewHolder)viewHolder).repsTitle.setText("Reps");
-                ((MyViewHolder)viewHolder).weightTitle.setText("Weight");
-                ((MyViewHolder)viewHolder).timeTitle.setText("Seconds");
 
-                ((MyViewHolder)viewHolder).title.setText(exercise.getTitle());
-                ((MyViewHolder)viewHolder).weight.setText(exercise.getWeight());
-                ((MyViewHolder)viewHolder).reps.setText(String.valueOf(exercise.getReps()));
-                ((MyViewHolder)viewHolder).time.setText(exercise.getTime());
+        // Create a layout manager to assign a layout to the RecyclerView. Here we have assigned the layout as LinearLayout with vertical orientation
+        LinearLayoutManager layoutManager = new LinearLayoutManager(parentViewHolder.ChildRecyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
 
-                break;
-            case SET_1_TO_3:
+        // Since this is a nested layout, so to define how many child items should be prefetched when the child RecyclerView is nested inside the parent RecyclerView, we use the following method
+        layoutManager.setInitialPrefetchItemCount(exercise.getChildItemList().size());
 
-        }
+        // Create an instance of the child item view adapter and set its adapter, layout manager and RecyclerViewPool
+        final ExerciseChildAdapter childItemAdapter = new ExerciseChildAdapter(exercise.getChildItemList(), exercise);
+
+        parentViewHolder.ChildRecyclerView.setLayoutManager(layoutManager);
+        parentViewHolder.ChildRecyclerView.setAdapter(childItemAdapter);
+        parentViewHolder.ChildRecyclerView.setRecycledViewPool(viewPool);
+
+        childItemAdapter.setOnItemClickListener(new ExerciseChildAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+                Toast.makeText(parentViewHolder.ChildRecyclerView.getContext().getApplicationContext(), "Set " + exercise.getChildItemList().get(position).getSet() + " is selected", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                if (viewHolder instanceof ExerciseChildAdapter.ChildViewHolder) {
+
+                    // backup of removed item for undo purposes
+                    final ExerciseChild set = exercise.getChildItemList().get(viewHolder.getAdapterPosition());
+                    final int deletedIndex = viewHolder.getAdapterPosition();
+                    int removedSetNumber = exercise.getChildItemList().get(viewHolder.getAdapterPosition()).getSet();
+
+
+                    childItemAdapter.removeItem(viewHolder.getAdapterPosition());
+
+                    Snackbar snackbar = Snackbar
+                            .make(((ExerciseChildAdapter.ChildViewHolder) viewHolder).fL, "Removed Set " + removedSetNumber, Snackbar.LENGTH_LONG);
+                    snackbar.setDuration(3000);
+
+                    snackbar.setAction("UNDO", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            boolean deleteItem = false;
+                            // undo is selected, restore the deleted item
+                            childItemAdapter.restoreItem(set, deletedIndex);
+                        }
+                    });
+                    snackbar.setActionTextColor(Color.YELLOW);
+                    snackbar.show();
+                    // childItemAdapter.notifyItemRemoved(position);
+                }
+            }
+        };
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(parentViewHolder.ChildRecyclerView);
 
 
     }
@@ -170,8 +220,8 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-      Exercise exercise = exercisesList.get(position);
-        if(exercise.isAnotherSet()) {
+        Exercise exercise = exercisesList.get(position);
+        if (exercise.isAnotherSet()) {
             return SET_1_TO_2;
         } else {
             return SET_1;
@@ -179,26 +229,13 @@ public  class ExerciseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-    public void removeItem(int position) {
-        exercisesList.remove(position);
-        // notify the item removed by position
-        // to perform recycler view delete animations
-        // NOTE: don't call notifyDataSetChanged()
-        notifyItemRemoved(position);
-    }
-
-    public void restoreItem(Exercise exercise, int position) {
-        exercisesList.add(position, exercise);
-        // notify item added by position
-        notifyItemInserted(position);
-    }
 
     @Override
     public int getItemCount() {
         return exercisesList.size();
     }
 
-    }
+}
 
 
 
