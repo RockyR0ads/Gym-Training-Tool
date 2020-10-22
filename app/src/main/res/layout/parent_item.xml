@@ -22,6 +22,18 @@
         android:textStyle="bold"
         />
 
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="15sp"
+        android:layout_marginLeft="350dp"
+        android:textStyle="italic"
+        android:text="date here"
+        />
+
     <Button
         android:id="@+id/addSets"
         style="@style/Widget.MaterialComponents.Button"
@@ -52,8 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:layout_marginLeft="220dp"
-
+        android:layout_marginLeft="210dp"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"
@@ -101,7 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
 
         <!--Child RecyclerView-->

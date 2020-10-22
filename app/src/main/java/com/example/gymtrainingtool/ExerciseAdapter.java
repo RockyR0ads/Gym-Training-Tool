@@ -21,6 +21,10 @@ import android.widget.Toast;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import static java.security.AccessController.getContext;
@@ -52,7 +56,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Parent
 
     public static class ParentViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView title, setsTitle, weightTitle, timeTitle, repsTitle, RPEtitle;
+        public TextView title, setsTitle, weightTitle, timeTitle, repsTitle, RPEtitle,date;
         public TextInputEditText sets, time, weight, reps;
         public Button addSet;
         public RelativeLayout viewBackground,viewForeground;
@@ -78,7 +82,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Parent
             RPEtitle = view.findViewById(R.id.RPETitle);
             viewForeground = view.findViewById(R.id.view_foreground);
             viewBackground = view.findViewById(R.id.view_background);
-
+            date = view.findViewById(R.id.date);
             ParentItemTitle = itemView.findViewById(R.id.parent_item_title);
             ChildRecyclerView = itemView.findViewById(R.id.recycler_view);
             parentCard = itemView.findViewById(R.id.linear_layout);
@@ -149,13 +153,15 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Parent
         // Create an instance of the ParentItem
         final Exercise exercise = exercisesList.get(position);
 
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
         parentViewHolder.ParentItemTitle.setText(exercise.getTitle());
         parentViewHolder.setsTitle.setText("Sets");
         parentViewHolder.weightTitle.setText("Weight");
         parentViewHolder.repsTitle.setText("Reps");
         parentViewHolder.timeTitle.setText("Time");
         parentViewHolder.RPEtitle.setText("RPE");
-
+        parentViewHolder.date.setText(dateFormat.format(date));
 
         // Create a layout manager to assign a layout to the RecyclerView. Here we have assigned the layout as LinearLayout with vertical orientation
         LinearLayoutManager layoutManager = new LinearLayoutManager(parentViewHolder.ChildRecyclerView.getContext(), LinearLayoutManager.VERTICAL, false);

@@ -4,7 +4,6 @@ package com.example.gymtrainingtool.ui.main;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,17 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.gymtrainingtool.Exercise;
@@ -33,7 +28,6 @@ import com.example.gymtrainingtool.R;
 import com.example.gymtrainingtool.RecyclerItemTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 
 
 import java.io.FileInputStream;
@@ -42,8 +36,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,18 +43,14 @@ import java.util.UUID;
 public class GripLogger extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     //private List<Exercise> exercisesList = new ArrayList<>();
-    private RecyclerView recyclerView,childRecyclerView;
+    private RecyclerView recyclerView;
     private ExerciseAdapter mAdapter;
-    private EditText exerciseDialog,sets,time,weight,reps;
-
-
+    private EditText exerciseDialog,setsTextField,time,weight,reps;
 
 
     public GripLogger() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,7 +67,6 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
 
         recyclerView = getView().findViewById(R.id.parent_recyclerview);
-        childRecyclerView = view.findViewById(R.id.recycler_view);
         mAdapter = new ExerciseAdapter(ParentItemList());
 
 
@@ -169,28 +156,35 @@ public class GripLogger extends Fragment implements RecyclerItemTouchHelper.Recy
 
     private void buildDialog(){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),AlertDialog.THEME_DEVICE_DEFAULT_DARK);
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View mView = inflater.inflate(R.layout.dialog_new_exercise, null);
 
-        exerciseDialog = mView.findViewById(R.id.exercise);
-        sets = mView.findViewById(R.id.sets);
-        time = mView.findViewById(R.id.time);
-        weight = mView.findViewById(R.id.weight);
-        reps = mView.findViewById(R.id.reps);
+        exerciseDialog = mView.findViewById(R.id.newExerciseDialog);
+        setsTextField = mView.findViewById(R.id.sets);
+
 
 
         builder.setView(mView);
-        builder.setMessage("Log new exercise");
-        builder.setIcon(android.R.drawable.ic_dialog_alert)
+        builder.setTitle("Log new exercise");
+        builder.setIcon(android.R.drawable.arrow_down_float)
 
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // do what when you click add
-                        Exercise exercise = new Exercise(exerciseDialog.getText().toString(),weight.getText().toString(),time.getText().toString(),Integer.parseInt(reps.getText().toString()));
+                        int setsInput = Integer.parseInt(setsTextField.getText().toString());
+                        List<ExerciseChild> ChildItemList = new ArrayList<>();
+                        for(int i = 0; i < setsInput; i++ ){
+                            int sets = i;
+                            ChildItemList.add(new ExerciseChild(++sets));
+                        }
+
+
+                        Exercise exercise = new Exercise(exerciseDialog.getText().toString(),ChildItemList);
                         mAdapter.addExercise(exercise);
                         writeList(getContext(),mAdapter.getExercisesList());
                         mAdapter.notifyDataSetChanged();
+                        Toast.makeText(getActivity().getApplicationContext(), "added another exercise!", Toast.LENGTH_SHORT).show();
 
                     }
                 })
