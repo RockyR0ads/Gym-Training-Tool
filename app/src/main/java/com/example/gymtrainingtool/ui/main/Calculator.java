@@ -46,6 +46,9 @@ public class Calculator extends Fragment {
     double ormWeight = 0;
     double oneRepMax = 0;
     double RPEresult = 0;
+    double bodyweight = 0;
+    double weightForbodyWeightCalc = 0;
+    double percentOfBodyWeightLifted=0;
 
     int repetitions = 0;
     int intPart = 0;
@@ -55,16 +58,16 @@ public class Calculator extends Fragment {
     boolean ccSwitchCheck = false;
 
     DecimalFormat df = new DecimalFormat();
-
+    DecimalFormat oneDecimal = new DecimalFormat();
 
     TextView result, LBresult, timer;
     ImageView image;
-    TextInputLayout poundWeight, weight, weight2, reps, Percentage, calorieInput,weight3,rpeBox;
+    TextInputLayout poundWeight, weight, weight2, reps, Percentage, calorieInput,weight3,rpeBox,bodyweightTextField,bodyPercentageWeight;
     EditText RPEdialog;
     Switch xmlSwitch;
     Switch ccSwitch;
 
-    Button start, pause, reset, submitButton, submit1, submit2, submitCC, submitRPE;
+    Button start, pause, reset, submitButton, submit1, submit2, submitCC, submitRPE,submitPercentageWeight;
     Handler handler;
     long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L ;
     int Seconds, Minutes, MilliSeconds ;
@@ -115,10 +118,14 @@ public class Calculator extends Fragment {
         weight3 = getView().findViewById(R.id.RPEreps);
         rpeBox = getView().findViewById(R.id.RPE);
         submitRPE = getView().findViewById(R.id.submitRPE);
+        submitPercentageWeight = getView().findViewById(R.id.submitWeightPercentage);
+        bodyweightTextField = getView().findViewById(R.id.bodyPercentageCalc);
+        bodyPercentageWeight = getView().findViewById(R.id.bodyPercentageWeight);
 
         handler = new Handler() ;
 
         df.setMaximumFractionDigits(3);
+        oneDecimal.setMaximumFractionDigits(1);
 
         weightConverter();
         calculateORM();
@@ -126,7 +133,7 @@ public class Calculator extends Fragment {
         percentageCalculator();
         mediaPlayer();
         stopwatchHandler();
-
+        calculatePercentageOfBodyWeight();
 
         submitRPE.setOnClickListener(new View.OnClickListener()
         {
@@ -295,6 +302,9 @@ public class Calculator extends Fragment {
 
                 // show the picture of the weight
                 image.setVisibility(View.VISIBLE);
+                LBresult.setVisibility(View.VISIBLE);
+                result.setVisibility(View.VISIBLE);
+                timer.setVisibility(View.INVISIBLE);
 
                 if(oneRepMax!=ormWeight) {
                     result.setText(oneRepMax + "Kg" + "\n");
@@ -327,6 +337,62 @@ public class Calculator extends Fragment {
                 }
             }
         });
+    }
+
+    private void calculatePercentageOfBodyWeight() {
+        submitPercentageWeight.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+                if (v != null) {
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+
+                // store the body weight
+                bodyweight = Double.parseDouble(bodyweightTextField.getEditText().getText().toString());
+                //store the weight
+                weightForbodyWeightCalc = Double.parseDouble(bodyPercentageWeight.getEditText().getText().toString());
+
+                //formula to get 1RM
+
+                    // oneRepMax = ormWeight * (1 + repetitions / 30f);
+                     percentOfBodyWeightLifted = weightForbodyWeightCalc / bodyweight;
+                percentOfBodyWeightLifted = Math.round(percentOfBodyWeightLifted * 10.0) / 10.0;
+
+
+                    LBresult.setText("x" + oneDecimal.format(percentOfBodyWeightLifted) + "\n");
+                    LBresult.setTextSize(70);
+
+                    result.setText("of your bodyweight" + "\n");
+                    result.setTextSize(30);
+
+
+                //pound conversion
+                convertedWeight = oneRepMax * 2.20462;
+                // lastDigit = convertedWeight;
+
+
+
+                //   weight.setText(String.valueOf((int)oneRepMax)); // pre-set percentage calculator weight value to the ORM
+
+                // show the picture of the weight
+                image.setVisibility(View.VISIBLE);
+                LBresult.setVisibility(View.VISIBLE);
+                result.setVisibility(View.VISIBLE);
+                timer.setVisibility(View.INVISIBLE);
+
+
+
+            }
+        });
+
+        // on tap remove the hint
+
+
+
     }
 
 
@@ -626,6 +692,11 @@ public class Calculator extends Fragment {
             @Override
             public void onClick(View view) {
                 timer.setVisibility(View.VISIBLE);
+                //hide weight result to make space for the timer
+                LBresult.setVisibility(View.INVISIBLE);
+                result.setVisibility(View.INVISIBLE);
+                image.setVisibility(View.INVISIBLE);
+
                 StartTime = SystemClock.uptimeMillis();
                 handler.postDelayed(runnable, 0);
                 timer.setVisibility(View.VISIBLE);
